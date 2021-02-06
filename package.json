@@ -3,16 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "bin": {
-    "snt build": "./src/build.ts",
-    "snt sync": "./src/sync.ts",
-    "snt watch": "./src/watch.ts"
+    "snt-build": "./src/build.ts",
+    "snt-compile": "./src/compile.ts",
+    "snt-sync": "./src/sync.ts"
   },
   "scripts": {
-    "start": "npm run build:live",
-    "snt-build": "src/build.ts",
-    "snt-compile": "src/compile.ts",
-    "snt-sync": "src/sync.ts",
-    "build:live": "nodemon --watch 'ts/**/*.ts' --exec \"npm run snt-compile\" -e ts"
+    "start": "npm run snt-build:watch",
+    "snt-build:watch": "nodemon --watch 'ts/**/*.ts' --exec \"snt-compile\" -e ts"
   },
   "keywords": [],
   "author": "Steven Gregory",
