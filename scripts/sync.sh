@@ -7,7 +7,7 @@ clean_build() {
 }
 
 get_project_name() {
-  echo $(cat $1 \
+echo $(cat $1 \
     | grep $2 \
     | head -1 \
     | awk -F: '{ print $2 }' \

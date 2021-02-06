@@ -3,11 +3,28 @@
   "version": "1.0.0",
   "description": "",
   "bin": {
-    "snt build": "./scripts/build.sh",
-    "snt sync": "./scripts/sync.sh",
-    "snt watch": "./scripts/compile.sh"
+    "snt build": "./src/build.ts",
+    "snt sync": "./src/sync.ts",
+    "snt watch": "./src/watch.ts"
+  },
+  "scripts": {
+    "start": "npm run build:live",
+    "snt-build": "src/build.ts",
+    "snt-compile": "src/compile.ts",
+    "snt-sync": "src/sync.ts",
+    "build:live": "nodemon --watch 'ts/**/*.ts' --exec \"npm run snt-compile\" -e ts"
   },
   "keywords": [],
   "author": "Steven Gregory",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.25",
+    "@types/servicenow": "^10.0.1",
+    "prettier": "^2.2.1"
+  }
 }
