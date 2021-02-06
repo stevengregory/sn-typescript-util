@@ -1,0 +1,13 @@
+{
+  "name": "sn-typescript-util",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "snt build": "./scripts/build.sh",
+    "snt sync": "./scripts/sync.sh",
+    "snt watch": "./scripts/compile.sh"
+  },
+  "keywords": [],
+  "author": "Steven Gregory",
+  "license": "ISC"
+}
