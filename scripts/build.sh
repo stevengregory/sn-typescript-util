@@ -35,7 +35,7 @@ get_project_name() {
 
 install_packages() {
   npm i typescript --save
-  npm i @types/servicenow prettier watch -D
+  npm i @types/servicenow @types/node npm-add-script nodemon prettier ts-node -D
 }
 
 make_prettier_file() {
@@ -58,6 +58,12 @@ replace_content() {
   sed -i '' -e "s/${1}/${2}/g" ${3}
 }
 
+update_package_scripts() {
+  npmAddScript -k start -v "npm run snt-build:watch"
+  npmAddScript -k snt-build:watch -v "nodemon --watch 'ts/**/*.ts' --exec \"snt-compile\" -e ts"
+}
+
 install_packages
+update_package_scripts
 make_tsconfig_file
 make_prettier_file
