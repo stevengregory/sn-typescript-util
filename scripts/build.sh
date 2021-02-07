@@ -34,8 +34,8 @@ get_project_name() {
 }
 
 install_packages() {
-  npm i typescript --save
-  npm i @types/servicenow @types/node npm-add-script nodemon prettier ts-node -D
+  npm i @types/servicenow @types/node npm-add-script nodemon prettier typescript ts-node -g
+  npm i @types/servicenow @types/node nodemon prettier ts-node typescript -D
 }
 
 make_prettier_file() {
