@@ -2,12 +2,12 @@
 
 create_prettier_config() {
   echo '
-  {
-    "trailingComma": "none",
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true
-  }'
+  module.exports = {
+    trailingComma: "none",
+    tabWidth: 2,
+    semi: true,
+    singleQuote: true,
+  };'
 }
 
 craft_tsconfig_template() {
@@ -39,7 +39,7 @@ install_packages() {
 }
 
 make_prettier_file() {
-  prettier_config=".prettierrc.json"
+  prettier_config=".prettierrc.js"
   touch "$prettier_config"
   echo $(create_prettier_config) > "$prettier_config"
   prettier --write "$prettier_config"
