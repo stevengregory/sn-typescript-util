@@ -7,10 +7,6 @@
     "snt-compile": "./src/compile.ts",
     "snt-sync": "./src/sync.ts"
   },
-  "scripts": {
-    "start": "npm run snt-build:watch",
-    "snt-build:watch": "nodemon --watch 'ts/**/*.ts' --exec \"snt-compile\" -e ts"
-  },
   "keywords": [],
   "author": "Steven Gregory",
   "license": "ISC",
