@@ -34,8 +34,8 @@ get_project_name() {
 }
 
 install_packages() {
-  npm i @types/servicenow @types/node npm-add-script nodemon prettier typescript ts-node -g
-  npm i @types/servicenow @types/node nodemon prettier ts-node typescript -D
+  npm i @types/servicenow @types/node commander npm-add-script nodemon prettier typescript ts-node -g
+  npm i @types/servicenow @types/node commander nodemon prettier ts-node typescript -D
 }
 
 make_prettier_file() {
@@ -60,7 +60,7 @@ replace_content() {
 
 update_package_scripts() {
   npmAddScript -k start -v "npm run snt-build:watch"
-  npmAddScript -k snt-build:watch -v "nodemon --watch 'ts/**/*.ts' --exec \"snt-compile\" -e ts"
+  npmAddScript -k snt-build:watch -v "nodemon --watch 'ts/**/*.ts' --exec \"snt -c\" -e ts"
 }
 
 install_packages

@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "A TypeScript utility for ServiceNow developers in VS Code",
   "bin": {
-    "snt-build": "./src/build.ts",
-    "snt-compile": "./src/compile.ts",
-    "snt-sync": "./src/sync.ts"
+    "snt": "./src/index.ts"
   },
   "keywords": [],
   "author": "Steven Gregory",
@@ -13,6 +11,7 @@
   "devDependencies": {
     "@types/node": "^14.14.25",
     "@types/servicenow": "^10.0.1",
+    "commander": "^7.0.0",
     "nodemon": "^2.0.7",
     "npm-add-script": "^1.1.0",
     "prettier": "^2.2.1",
