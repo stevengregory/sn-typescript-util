@@ -1,7 +1,7 @@
 {
   "name": "sn-typescript-util",
   "version": "1.0.0",
-  "description": "TypeScript utility for ServiceNow to improve developer workflow",
+  "description": "A TypeScript utility for ServiceNow developers in VS Code",
   "bin": {
     "snt-build": "./src/build.ts",
     "snt-compile": "./src/compile.ts",
