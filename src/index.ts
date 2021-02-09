@@ -7,9 +7,18 @@ const { program } = require('commander');
 
 program.description(description);
 program.version(version);
-program.option('-b, --build', 'build it');
-program.option('-c, --compile', 'compile it');
-program.option('-s, --sync', 'sync it');
+program.option(
+  '-b, --build',
+  'Build project utility files & package dependencies'
+);
+program.option(
+  '-c, --compile',
+  'Compile TypeScript files to JavaScript & move to src'
+);
+program.option(
+  '-s, --sync',
+  'Sync new instance-based src files to the ts directory'
+);
 program.parse(process.argv).opts();
 
 const options = program.opts();
