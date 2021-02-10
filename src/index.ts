@@ -5,17 +5,21 @@ const path = require('path');
 const { description, version } = require('./../package.json');
 const { program } = require('commander');
 
+const getFilePath = (file) => {
+  return `sh ${path.join(__dirname, '../scripts')}/${file}.sh`;
+};
+
 const getOption = (opts) => {
   const option = Object.keys(opts).toString();
   const options = {
     build: () => {
-      childProcess.exec(`sh ${path.join(__dirname, '../scripts')}/build.sh`);
+      childProcess.exec(getFilePath('build'));
     },
     compile: () => {
-      childProcess.exec(`sh ${path.join(__dirname, '../scripts')}/compile.sh`);
+      childProcess.exec(getFilePath('compile'));
     },
     sync: () => {
-      childProcess.exec(`sh ${path.join(__dirname, '../scripts')}/sync.sh`);
+      childProcess.exec(getFilePath('sync'));
     },
     default: () => {
       program.help();
