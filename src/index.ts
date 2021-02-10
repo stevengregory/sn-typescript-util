@@ -27,16 +27,16 @@ const { program } = require('commander');
 function getOption(opts) {
   const option = Object.keys(opts).toString();
   const options = {
-    build: function () {
+    build: () => {
       childProcess.exec(`sh ${path.join(__dirname, '../scripts')}/build.sh`);
     },
-    compile: function () {
+    compile: () => {
       childProcess.exec(`sh ${path.join(__dirname, '../scripts')}/compile.sh`);
     },
-    sync: function () {
+    sync: () => {
       childProcess.exec(`sh ${path.join(__dirname, '../scripts')}/sync.sh`);
     },
-    default: function () {
+    default: () => {
       program.help();
     }
   };
