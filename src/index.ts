@@ -10,15 +10,15 @@ const { program } = require('commander');
   program.version(version);
   program.option(
     '-b, --build',
-    'Build project utility files & package dependencies'
+    'build project utility files & package dependencies'
   );
   program.option(
     '-c, --compile',
-    'Compile TypeScript files to JavaScript & move to src'
+    'compile TypeScript files to JavaScript & move to src'
   );
   program.option(
     '-s, --sync',
-    'Sync new instance-based src files to the ts directory'
+    'sync new instance-based src files to the ts directory'
   );
   program.parse(process.argv).opts();
   getOption(program.opts());
