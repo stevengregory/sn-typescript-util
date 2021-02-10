@@ -1,11 +1,15 @@
 {
   "name": "sn-typescript-util",
   "version": "1.0.0",
-  "description": "A TypeScript utility for ServiceNow developers in VS Code",
+  "description": "A TypeScript utility for ServiceNow developers using VS Code",
   "bin": {
     "snt": "./src/index.ts"
   },
-  "keywords": [],
+  "keywords": [
+    "ServiceNow",
+    "Service Portal",
+    "TypeScript"
+  ],
   "author": "Steven Gregory",
   "license": "ISC",
   "devDependencies": {
