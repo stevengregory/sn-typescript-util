@@ -59,8 +59,8 @@ replace_content() {
 }
 
 update_package_scripts() {
-  npmAddScript -k start -v "npm run snt-build:watch"
-  npmAddScript -k snt-build:watch -v "nodemon --watch 'ts/**/*.ts' --exec \"snt -c\" -e ts"
+  npmAddScript -k start -v "npm run snt:watch"
+  npmAddScript -k snt:watch -v "nodemon --watch 'ts/**/*.ts' --exec \"snt -c\" -e ts"
 }
 
 install_packages
