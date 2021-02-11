@@ -6,11 +6,10 @@ A [TypeScript](https://www.typescriptlang.org/) CLI utility that works on-top of
 
 Using TypeScript, the CLI provides an enhanced developer workflow.
 
-- Extend JavaScript by using Types
-- Work in bleeding-edge JavaScript ES2015 (ES6) and beyond
-- Use IntelliSense for intelligent code-completion
+- Work in modern JavaScript ES2015 (ES6) and beyond
+- Extend JavaScript by using types
+- Unlock code navigation and intelligent code completion
 - Catch bugs before syncing to the instance
-- Escape ES5 in ServiceNow
 
 ## Prerequisites
 
