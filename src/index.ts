@@ -5,21 +5,27 @@ const path = require('path');
 const { description, version } = require('./../package.json');
 const { program } = require('commander');
 
-const getFilePath = (file) => {
-  return `sh ${path.join(__dirname, '../scripts')}/${file}.sh`;
+const runBash = (file) => {
+  return childProcess.exec(`sh ${path.join(__dirname, '../scripts')}/${file}`);
 };
+
+const runRuby = (file) => {
+  return childProcess.exec(`${path.join(__dirname, '../scripts')}/${file}`, function (stdout) {
+    return stdout;
+  });
+}
 
 const getOption = (opts) => {
   const option = Object.keys(opts).toString();
   const options = {
     build: () => {
-      childProcess.exec(getFilePath('build'));
+      runRuby('run.rb');
     },
     compile: () => {
-      childProcess.exec(getFilePath('compile'));
+      runBash('compile.sh');
     },
     sync: () => {
-      childProcess.exec(getFilePath('sync'));
+      runBash('sync.sh');
     },
     default: () => {
       program.help();
