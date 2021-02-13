@@ -5,10 +5,6 @@ const path = require('path');
 const { description, version } = require('./../package.json');
 const { program } = require('commander');
 
-const runBash = (file) => {
-  return childProcess.exec(`sh ${path.join(__dirname, '../scripts')}/${file}.sh`);
-};
-
 const runScript = (file) => {
   return childProcess.exec(`${path.join(__dirname, '../scripts')}/${file}.rb`, function (stdout) {
     return stdout;
@@ -25,7 +21,7 @@ const getOption = (opts) => {
       runScript('compile');
     },
     sync: () => {
-      runBash('sync');
+      runScript('sync');
     },
     default: () => {
       program.help();

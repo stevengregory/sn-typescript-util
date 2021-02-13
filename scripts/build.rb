@@ -34,6 +34,10 @@ module ServiceNow
       create_tsconfig
     end
 
+    def sync
+      ServiceNow::Utils.new.clean_build dist
+    end
+
     def transpile
       src_path = "#{ServiceNow::Utils.new.get_project}/src"
       %x( tsc )

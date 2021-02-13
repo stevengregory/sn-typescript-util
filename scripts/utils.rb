@@ -1,9 +1,14 @@
 #!/usr/bin/env ruby
 
+require 'fileutils'
 require 'json'
 
 module ServiceNow
   class Utils
+    def clean_build(dir)
+      FileUtils.rm_rf Dir.glob("#{dir}*") if File.directory?(dir)
+    end
+
     def fetch_file(dir, file)
       File.read(File.join(File.expand_path('..', __dir__), "#{dir}/#{file}"))
     end
