@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+  "target": "es5",
+  "outDir": "dist",
+  "baseUrl": ".",
+  "paths": {
+    "*": ["./lib/dts/index.d.ts"]
+  }
+},
+  "include": ["./@project/ts/**/*", "./lib/dts/index.d.ts", "./@project/ts/Interfaces/*.ts"]
+}
