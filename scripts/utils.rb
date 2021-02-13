@@ -6,7 +6,7 @@ require 'json'
 module ServiceNow
   class Utils
     def clean_build(dir)
-      FileUtils.rm_rf Dir.glob("#{dir}*") if File.directory?(dir)
+      FileUtils.rm_rf(dir)
     end
 
     def fetch_file(dir, file)

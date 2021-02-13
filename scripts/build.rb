@@ -35,7 +35,7 @@ module ServiceNow
     end
 
     def sync
-      ServiceNow::Utils.new.clean_build dist
+      ServiceNow::Utils.new.clean_build 'dist'
     end
 
     def transpile
