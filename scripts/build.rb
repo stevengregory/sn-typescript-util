@@ -11,14 +11,14 @@ module ServiceNow
 
     def make_prettier_config
       config = '.prettierrc.json'
-      file_path = File.read(File.join(File.expand_path('..', __dir__), "templates/#{config}"))
-      File.write(config, file_path)
+      file = ServiceNow::Utils.new.fetch_file 'scripts', config
+      File.write(config, file)
     end
 
     def make_tsconfig_file
       config = 'tsconfig.json'
-      file_path = File.read(File.join(File.expand_path('..', __dir__), "templates/#{config}"))
-      File.write(config, file_path)
+      file = ServiceNow::Utils.new.fetch_file 'scripts', config
+      File.write(config, file)
       ServiceNow::Utils.new.replace_content config
     end
 
