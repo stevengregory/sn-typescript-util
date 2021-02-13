@@ -27,7 +27,7 @@ module ServiceNow
       %x( npmAddScript -k snt:watch -v "nodemon --watch 'ts/**/*.ts' --exec 'snt -c' -e ts" )
     end
 
-    def create
+    def start
       install_packages
       update_package_scripts
       create_prettier_config

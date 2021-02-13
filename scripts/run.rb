@@ -3,5 +3,5 @@
 require_relative File.join(__dir__, 'build')
 
 module ServiceNow
-  ServiceNow::Build.new.create
+  ServiceNow::Build.new.start
 end
