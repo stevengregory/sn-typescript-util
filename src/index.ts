@@ -6,11 +6,11 @@ const { description, version } = require('./../package.json');
 const { program } = require('commander');
 
 const runBash = (file) => {
-  return childProcess.exec(`sh ${path.join(__dirname, '../scripts')}/${file}`);
+  return childProcess.exec(`sh ${path.join(__dirname, '../scripts')}/${file}.sh`);
 };
 
-const runRuby = (file) => {
-  return childProcess.exec(`${path.join(__dirname, '../scripts')}/${file}`, function (stdout) {
+const runScript = (file) => {
+  return childProcess.exec(`${path.join(__dirname, '../scripts')}/${file}.rb`, function (stdout) {
     return stdout;
   });
 }
@@ -19,13 +19,13 @@ const getOption = (opts) => {
   const option = Object.keys(opts).toString();
   const options = {
     build: () => {
-      runRuby('run.rb');
+      runScript('init');
     },
     compile: () => {
-      runBash('compile.sh');
+      runScript('compile');
     },
     sync: () => {
-      runBash('sync.sh');
+      runBash('sync');
     },
     default: () => {
       program.help();
