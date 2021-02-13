@@ -5,7 +5,7 @@ require_relative File.join(__dir__, 'utils')
 module ServiceNow
   class Build
     def initialize
-      @build_path = ServiceNow::Utils.new.get_build_path
+      @app = ServiceNow::Utils.new.get_application
     end
 
     def add_packages
@@ -40,16 +40,13 @@ module ServiceNow
 
     def sync
       ServiceNow::Utils.new.clean_build 'dist'
-      src_path = @build_path 'src'
-      dest_path = @build_path 'ts'
-      %x( rsync --ignore-existing --delete-after -raz --progress --exclude "Interfaces" "#{src_path}" "#{dest_path}" )
+      %x( rsync --ignore-existing --delete-after -raz --progress --exclude "Interfaces" "#{@app}/src" "#{@app}/ts" )
     end
 
     def transpile
-      src_path = @build_path 'src'
       %x( tsc )
       %x( prettier --write "dist/**/*.js" )
-      %x( rsync -av --progress -a --exclude="Interfaces" "dist/" "#{src_path}" )
+      %x( rsync -av --progress -a --exclude="Interfaces" "dist/" "#{@app}/src" )
     end
   end
 end
