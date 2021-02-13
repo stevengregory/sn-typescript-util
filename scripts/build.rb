@@ -27,11 +27,18 @@ module ServiceNow
       ServiceNow::Utils.new.replace_content config
     end
 
-    def start
+    def init
       add_packages
       add_package_scripts
       create_prettier_config
       create_tsconfig
+    end
+
+    def transpile
+      src_path = "#{ServiceNow::Utils.new.get_project}/src"
+      %x( tsc )
+      %x( prettier --write "dist/**/*.js" )
+      %x( rsync -av --progress -a --exclude="Interfaces" "dist/" "#{src_path}" )
     end
   end
 end
