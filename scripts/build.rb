@@ -36,10 +36,13 @@ module ServiceNow
 
     def sync
       ServiceNow::Utils.new.clean_build 'dist'
+      src_path = ServiceNow::Utils.new.get_build_path 'src'
+      dest_path = ServiceNow::Utils.new.get_build_path 'ts'
+      %x( rsync --ignore-existing --delete-after -raz --progress --exclude "Interfaces" "#{src_path}" "#{dest_path}" )
     end
 
     def transpile
-      src_path = "#{ServiceNow::Utils.new.get_project}/src"
+      src_path = ServiceNow::Utils.new.get_build_path 'src'
       %x( tsc )
       %x( prettier --write "dist/**/*.js" )
       %x( rsync -av --progress -a --exclude="Interfaces" "dist/" "#{src_path}" )

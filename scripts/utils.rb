@@ -13,6 +13,10 @@ module ServiceNow
       File.read(File.join(File.expand_path('..', __dir__), "#{dir}/#{file}"))
     end
 
+    def get_build_path(dir)
+      "#{get_project}/#{dir}"
+    end
+
     def get_project
       file_path = File.read('system/sn-workspace.json')
       JSON.parse(file_path)['ACTIVE_APPLICATION']
