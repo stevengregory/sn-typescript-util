@@ -24,3 +24,7 @@ Install the npm package.
 ```bash
 npm install -g sn-typescript-util
 ```
+
+## License
+
+[MIT License](LICENSE)
