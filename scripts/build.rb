@@ -9,13 +9,7 @@ module ServiceNow
     end
 
     def add_packages
-      %x( npm i @types/servicenow @types/node commander npm-add-script nodemon prettier typescript ts-node -g )
-      %x( npm i @types/servicenow @types/node commander nodemon prettier ts-node typescript -D )
-    end
-
-    def add_package_scripts
-      %x( npmAddScript -k start -v "npm run snt:watch" )
-      %x( npmAddScript -k snt:watch -v "nodemon --watch 'ts/**/*.ts' --exec 'snt -c' -e ts" )
+      %x( sh "#{File.join(__dir__, 'install.sh')}" )
     end
 
     def create_prettier_config
@@ -33,7 +27,6 @@ module ServiceNow
 
     def init
       add_packages
-      add_package_scripts
       create_prettier_config
       create_tsconfig
     end
