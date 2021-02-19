@@ -6,6 +6,7 @@ module ServiceNow
   class Build
     def initialize
       @app = ServiceNow::Utils.new.get_application
+      @out_dir = 'dist'
     end
 
     def add_packages
@@ -40,14 +41,14 @@ module ServiceNow
     end
 
     def sync
-      ServiceNow::Utils.new.clean_build 'dist'
+      ServiceNow::Utils.new.clean_build @out_dir
       %x( rsync --ignore-existing --delete-after -raz --progress --exclude "Interfaces" "#{@app}/src" "#{@app}/ts" )
     end
 
     def transpile
       %x( tsc )
-      %x( prettier --write "dist/**/*.js" )
-      %x( rsync -av --progress -a --exclude="Interfaces" "dist/" "#{@app}/src" )
+      %x( prettier --write "#{@out_dir}/**/*.js" )
+      %x( rsync -av --progress -a --exclude="Interfaces" "#{@out_dir}/" "#{@app}/src" )
     end
   end
 end
