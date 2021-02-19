@@ -12,6 +12,13 @@ module ServiceNow
       %x( sh "#{File.join(__dir__, 'install.sh')}" )
     end
 
+    def create_nodemon_config
+      config = 'nodemon.json'
+      file = ServiceNow::Utils.new.fetch_file 'templates', config
+      File.write(config, file)
+      ServiceNow::Utils.new.replace_content config
+    end
+
     def create_prettier_config
       config = '.prettierrc.json'
       file = ServiceNow::Utils.new.fetch_file 'templates', config
@@ -29,6 +36,7 @@ module ServiceNow
       add_packages
       create_prettier_config
       create_tsconfig
+      create_nodemon_config
     end
 
     def sync

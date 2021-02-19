@@ -2,6 +2,7 @@
 
 const childProcess = require('child_process');
 const path = require('path');
+const nodemon = require('nodemon');
 const { description, version } = require('./../package.json');
 const { program } = require('commander');
 
@@ -22,6 +23,9 @@ const getOption = (opts) => {
     },
     sync: () => {
       runScript('sync');
+    },
+    watch: () => {
+      childProcess.exec('nodemon')
     },
     default: () => {
       program.help();
@@ -44,6 +48,10 @@ const getOption = (opts) => {
   program.option(
     '-s, --sync',
     'sync new instance-based src files to the ts directory'
+  );
+  program.option(
+    '-w, --watch',
+    'watch TypeScript files & compile changes'
   );
   program.parse(process.argv).opts();
   getOption(program.opts());

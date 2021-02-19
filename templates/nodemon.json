@@ -1,0 +1,11 @@
+{
+  "verbose": true,
+  "ignore": ["Interfaces"],
+  "watch": [
+    "@project/ts/**/*.ts"
+  ],
+  "execMap": {
+    "js": "npm run snt:watch"
+  },
+  "ext": "ts"
+}

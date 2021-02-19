@@ -17,5 +17,4 @@ do
   npm i $p -D
 done
 
-npmAddScript -k start -v "npm run snt:watch"
-npmAddScript -k snt:watch -v "nodemon --watch 'ts/**/*.ts' --exec 'snt -c' -e ts"
+npmAddScript -k snt:watch -v "snt -c"
