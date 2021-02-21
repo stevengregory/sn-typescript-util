@@ -5,7 +5,7 @@
     "@project/ts/**/*.ts"
   ],
   "execMap": {
-    "js": "npm run snt:watch"
+    "js": "npm run snts:watch"
   },
   "ext": "ts"
 }

@@ -18,4 +18,4 @@ do
   npm i $p -D
 done
 
-npmAddScript -k snt:watch -v "snt -c"
+npmAddScript -k snts:watch -v "snts -c"
