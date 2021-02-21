@@ -3,6 +3,7 @@
 readonly packages=(
   '@types/servicenow'
   '@types/node'
+  'colorette'
   'commander'
   'npm-add-script'
   'nodemon'
