@@ -42,7 +42,7 @@ module ServiceNow
 
     def sync
       ServiceNow::Utils.new.clean_build @out_dir
-      %x( rsync --ignore-existing --delete-after -raz --progress --exclude "Interfaces" "#{@app}/src" "#{@app}/ts" )
+      %x( rsync --ignore-existing --delete-after -raz --progress --prune-empty-dirs --include "*/" --include "*.js" --exclude="*" "#{@app}/src/" "#{@app}/ts" )
     end
 
     def transpile
