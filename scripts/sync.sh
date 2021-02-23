@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 clean_build() {
   if [ -d $1 ]; then
@@ -22,7 +22,7 @@ sync() {
   if [ -d "$ts_path" ]; then
     find "$ts_path" -name "*.ts" -exec sh -c 'mv "$0" "${0%.ts}.js"' {} \;
   fi
-  rsync --ignore-existing --delete-after -raz --progress --exclude "$interface_dir" "$src_path/" "$ts_path"
+  rsync --ignore-existing --delete-after -raz --progress --prune-empty-dirs --include "*/" --include "*.js" --exclude="*" "$interface_dir" "$src_path/" "$ts_path"
   find "$ts_path" -name "*.js" -exec sh -c 'mv "$0" "${0%.js}.ts"' {} \;
 }
 

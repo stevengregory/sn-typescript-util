@@ -38,11 +38,11 @@ module ServiceNow
       create_prettier_config
       create_tsconfig
       create_nodemon_config
+      sync
     end
 
     def sync
-      ServiceNow::Utils.new.clean_build @out_dir
-      %x( rsync --ignore-existing --delete-after -raz --progress --prune-empty-dirs --include "*/" --include "*.js" --exclude="*" "#{@app}/src/" "#{@app}/ts" )
+      %x( sh "#{File.join(__dir__, 'sync.sh')}" )
     end
 
     def transpile
