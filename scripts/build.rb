@@ -35,10 +35,14 @@ module ServiceNow
 
     def init
       add_packages
+      make_configs
+      sync
+    end
+
+    def make_configs
+      create_nodemon_config
       create_prettier_config
       create_tsconfig
-      create_nodemon_config
-      sync
     end
 
     def sync
