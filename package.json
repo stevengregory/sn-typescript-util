@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A TypeScript utility for ServiceNow developers using VS Code",
   "bin": {
-    "snts": "./src/index.ts"
+    "snts": "./bin/snts.ts"
   },
   "keywords": [
     "ServiceNow",
