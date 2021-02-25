@@ -14,8 +14,9 @@ readonly packages=(
 
 for p in "${packages[@]}"
 do
-  npm i $p -g
   npm i $p -D
 done
 
+npm i -g nodemon
+npm i -g npm-add-script
 npmAddScript -k snts:watch -v "snts -c"

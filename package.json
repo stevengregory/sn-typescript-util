@@ -12,7 +12,7 @@
   ],
   "author": "Steven Gregory",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "@types/node": "^14.14.25",
     "@types/servicenow": "^10.0.1",
     "colorette": "^1.2.1",
