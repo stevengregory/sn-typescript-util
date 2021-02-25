@@ -20,12 +20,16 @@ Using TypeScript, the CLI provides an enhanced developer workflow.
 - Unlock code navigation and intelligent code completion
 - Catch bugs before syncing to the instance
 
+**[Back to top](#table-of-contents)**
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/)
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [ServiceNow Extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ServiceNow.now-vscode)
 - A [project created](https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html#create-project) and [application imported](https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html#vscode-import-application) in VS Code
+
+**[Back to top](#table-of-contents)**
 
 ## Installation and Setup
 
@@ -43,6 +47,8 @@ snts --build
 
 In the application directory created by the ServiceNow Extension for VS Code, the build creates a `ts` directory from the JavaScript files in the `src` directory. This is where all the TypeScript code resides and where the workflow begins.
 
+**[Back to top](#table-of-contents)**
+
 ## Basic Workflow
 
 After installation & setup, simply invoke `nodemon` to start looking for TypeScript code changes in the `ts` directory.
@@ -52,6 +58,8 @@ nodemon
 ```
 
 Any JavaScript ES2015 (ES6) code added will get converted down to ES5 and moved to the `src` directory. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
+
+**[Back to top](#table-of-contents)**
 
 ## Commands
 
@@ -107,6 +115,10 @@ Or simply invoke `nodemon`. This will start monitoring for file changes and prov
 nodemon
 ```
 
+**[Back to top](#table-of-contents)**
+
 ## License
 
 [MIT License](LICENSE)
+
+**[Back to top](#table-of-contents)**
