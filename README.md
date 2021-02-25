@@ -2,6 +2,15 @@
 
 A [TypeScript](https://www.typescriptlang.org/) CLI utility that works on-top of the ServiceNow Extension for VS Code. This tool activates a TypeScript-based workflow for ServiceNow developers using VS Code.
 
+## Table of Contents
+
+1. [Benefits](#benefits)
+1. [Prerequisites](#prerequisites)
+1. [Installation and Setup](#installation-and-setup)
+1. [Basic Workflow](#basic-workflow)
+1. [Commands](#commands)
+1. [License](#license)
+
 ## Benefits
 
 Using TypeScript, the CLI provides an enhanced developer workflow.
@@ -18,7 +27,7 @@ Using TypeScript, the CLI provides an enhanced developer workflow.
 - [ServiceNow Extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ServiceNow.now-vscode)
 - A [project created](https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html#create-project) and [application imported](https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html#vscode-import-application) in VS Code
 
-## Installation & Setup
+## Installation and Setup
 
 Install the npm package.
 
