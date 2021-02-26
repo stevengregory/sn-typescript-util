@@ -1,6 +1,6 @@
 {
   "name": "sn-typescript-util",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A TypeScript utility for ServiceNow developers using VS Code",
   "bin": {
     "snts": "bin/snts.ts"
@@ -12,6 +12,10 @@
   ],
   "author": "Steven Gregory",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stevengregory/sn-typescript-util.git"
+  },
   "dependencies": {
     "@types/node": "^14.14.25",
     "@types/servicenow": "^10.0.1",
