@@ -82,6 +82,7 @@ function runProgressScript(file) {
   return childProcess.exec(
     `${path.join(__dirname, '../scripts')}/${file}.rb`,
     function (stdout) {
+      bar.update(50);
       bar.update(100);
       bar.stop();
       return stdout;
