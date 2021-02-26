@@ -10,38 +10,16 @@ const { description, version } = require('./../package.json');
 const { program } = require('commander');
 const { bold, red } = require('colorette');
 
-const getProgressBar = () => {
-  return new cliProgress.SingleBar({
-    format: 'CLI Progress |' + colors.cyan('{bar}') + '| {percentage}% || {value}/{total} Chunks',
-    barCompleteChar: '\u2588',
-    barIncompleteChar: '\u2591',
-    hideCursor: true
-  });
-};
+(() => {
+  return hasApplication() && init();
+})();
 
-const runScript = (file) => {
-  return childProcess.exec(
-    `${path.join(__dirname, '../scripts')}/${file}.rb`,
-    function (stdout) {
-      return stdout;
-    }
-  );
-};
+function getErrorMsg() {
+  return console.error(bold(red('No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n' +
+  'https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html')));
+}
 
-const runProgressScript = (file) => {
-  var bar = getProgressBar();
-  bar.start(100, 0);
-  return childProcess.exec(
-    `${path.join(__dirname, '../scripts')}/${file}.rb`,
-    function (stdout) {
-      bar.update(100);
-      bar.stop();
-      return stdout;
-    }
-  );
-};
-
-const getOption = (opts) => {
+function getOption(opts) {
   const option = Object.keys(opts).toString();
   const options = {
     build: () => {
@@ -61,14 +39,18 @@ const getOption = (opts) => {
     }
   };
   return (options[option] || options['default'])();
-};
+}
 
-const getErrorMsg = () => {
-  return console.error(bold(red('No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n' +
-  'https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html')));
-};
+function getProgressBar() {
+  return new cliProgress.SingleBar({
+    format: 'CLI Progress |' + colors.cyan('{bar}') + '| {percentage}% || {value}/{total} Chunks',
+    barCompleteChar: '\u2588',
+    barIncompleteChar: '\u2591',
+    hideCursor: true
+  });
+}
 
-const hasApplication = () => {
+function hasApplication() {
   try {
     const workspace = fs.readFileSync('system/sn-workspace.json');
     const app = JSON.parse(workspace).ACTIVE_APPLICATION;
@@ -77,9 +59,9 @@ const hasApplication = () => {
     getErrorMsg();
     return process.exit(e.code);
   }
-};
+}
 
-const init = () => {
+function init() {
   program.description(description);
   program.version(version);
   program.option(
@@ -100,8 +82,26 @@ const init = () => {
   );
   program.parse(process.argv).opts();
   getOption(program.opts());
-};
+}
 
-(() => {
-  return hasApplication() && init();
-})();
+function runProgressScript(file) {
+  var bar = getProgressBar();
+  bar.start(100, 0);
+  return childProcess.exec(
+    `${path.join(__dirname, '../scripts')}/${file}.rb`,
+    function (stdout) {
+      bar.update(100);
+      bar.stop();
+      return stdout;
+    }
+  );
+}
+
+function runScript(file) {
+  return childProcess.exec(
+    `${path.join(__dirname, '../scripts')}/${file}.rb`,
+    function (stdout) {
+      return stdout;
+    }
+  );
+}
