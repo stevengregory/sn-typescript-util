@@ -5,7 +5,6 @@ const cliProgress = require('cli-progress');
 const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
-const nodemon = require('nodemon');
 const { description, version } = require('./../package.json');
 const { program } = require('commander');
 const { bold, red } = require('colorette');
@@ -30,9 +29,6 @@ function getOption(opts) {
     },
     sync: () => {
       runProgressScript('sync');
-    },
-    watch: () => {
-      childProcess.exec('nodemon');
     },
     default: () => {
       program.help();
@@ -75,10 +71,6 @@ function init() {
   program.option(
     '-s, --sync',
     'sync new instance-based src files to the ts directory'
-  );
-  program.option(
-    '-w, --watch',
-    'watch TypeScript files & compile changes'
   );
   program.parse(process.argv).opts();
   getOption(program.opts());

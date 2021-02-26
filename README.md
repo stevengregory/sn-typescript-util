@@ -53,10 +53,10 @@ In the application directory created by the ServiceNow Extension for VS Code, th
 
 ## Basic Workflow
 
-After installation & setup, simply invoke `nodemon` to start looking for TypeScript code changes in the `ts` directory.
+After installation & setup, simply run the `watch` script to start looking for TypeScript code changes in the `ts` directory.
 
 ```bash
-nodemon
+npm run watch
 ```
 
 Any JavaScript ES2015 (ES6) code added will get converted down to ES5 and moved to the `src` directory. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
@@ -101,20 +101,6 @@ Sync new instance-based `src` files to the `ts` directory.
 
 ```bash
 snts --sync
-```
-
-### Watch
-
-Watch TypeScript files in the `ts` directory for changes with nodemon. Then compiles changes and moves them to the `src` directory.
-
-```bash
-snts --watch
-```
-
-Or simply invoke `nodemon`. This will start monitoring for file changes and provide verbose logging as they occur.
-
-```bash
-nodemon
 ```
 
 **[Back to top](#table-of-contents)**

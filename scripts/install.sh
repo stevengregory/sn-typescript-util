@@ -19,4 +19,4 @@ done
 
 npm i -g nodemon
 npm i -g npm-add-script
-npmAddScript -k snts:watch -v "snts -c"
+npmAddScript -k watch -v "nodemon --exec snts -c"
