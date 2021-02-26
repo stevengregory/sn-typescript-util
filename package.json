@@ -1,9 +1,9 @@
 {
   "name": "sn-typescript-util",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A TypeScript utility for ServiceNow developers using VS Code",
   "bin": {
-    "snts": "./bin/snts.ts"
+    "snts": "bin/snts.ts"
   },
   "keywords": [
     "ServiceNow",
