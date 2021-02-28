@@ -5,6 +5,8 @@ const cliProgress = require('cli-progress');
 const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
+const util = require('util');
+const exec = util.promisify(childProcess.exec);
 const { description, version } = require('./../package.json');
 const { program } = require('commander');
 const { bold, red } = require('colorette');
@@ -14,21 +16,27 @@ const { bold, red } = require('colorette');
 })();
 
 function getErrorMsg() {
-  return console.error(bold(red('No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n' +
-  'https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html')));
+  return console.error(
+    bold(
+      red(
+        'No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n' +
+          'https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html'
+      )
+    )
+  );
 }
 
 function getOption(opts) {
   const option = Object.keys(opts).toString();
   const options = {
     build: () => {
-      runProgressScript('init');
+      startBuild();
     },
     compile: () => {
-      runScript('compile');
+      runScript('compile.rb');
     },
     sync: () => {
-      runProgressScript('sync');
+      runProgressScript('sync.sh');
     },
     default: () => {
       program.help();
@@ -39,7 +47,10 @@ function getOption(opts) {
 
 function getProgressBar() {
   return new cliProgress.SingleBar({
-    format: 'CLI Progress |' + colors.cyan('{bar}') + '| {percentage}% || {value}/{total} Chunks',
+    format:
+      'CLI Progress |' +
+      colors.cyan('{bar}') +
+      '| {percentage}% || {value}/{total} Chunks',
     barCompleteChar: '\u2588',
     barIncompleteChar: '\u2591',
     hideCursor: true
@@ -55,6 +66,10 @@ function hasApplication() {
     getErrorMsg();
     return process.exit(e.code);
   }
+}
+
+function getFilePath(file) {
+  return `${path.join(__dirname, '../scripts')}/${file}`;
 }
 
 function init() {
@@ -76,25 +91,57 @@ function init() {
   getOption(program.opts());
 }
 
+function progressComplete(bar) {
+  bar.update(100);
+  bar.stop();
+}
+
+function progressStart(bar) {
+  bar.start(100, 0);
+  bar.update(1);
+}
+
+async function runConfigs(bar) {
+  return await exec(getFilePath('init.rb'), (stdout) => {
+    bar.update(10);
+    runSync(bar);
+    return stdout;
+  });
+}
+
+async function runInstall(bar) {
+  bar.update(50);
+  return await exec(getFilePath('install.sh'), (stdout) => {
+    progressComplete(bar);
+    return stdout;
+  });
+}
+
 function runProgressScript(file) {
   var bar = getProgressBar();
-  bar.start(100, 0);
-  return childProcess.exec(
-    `${path.join(__dirname, '../scripts')}/${file}.rb`,
-    function (stdout) {
-      bar.update(50);
-      bar.update(100);
-      bar.stop();
-      return stdout;
-    }
-  );
+  progressStart(bar);
+  return childProcess.exec(getFilePath(file), (stdout) => {
+    progressComplete(bar);
+    return stdout;
+  });
 }
 
 function runScript(file) {
-  return childProcess.exec(
-    `${path.join(__dirname, '../scripts')}/${file}.rb`,
-    function (stdout) {
-      return stdout;
-    }
-  );
+  return childProcess.exec(getFilePath(file), (stdout) => {
+    return stdout;
+  });
+}
+
+async function runSync(bar) {
+  return await exec(getFilePath('sync.sh'), (stdout) => {
+    bar.update(25);
+    runInstall(bar);
+    return stdout;
+  });
+}
+
+async function startBuild() {
+  var bar = getProgressBar();
+  progressStart(bar);
+  return await Promise.all([runConfigs(bar)]);
 }

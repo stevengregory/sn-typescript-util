@@ -9,10 +9,6 @@ module ServiceNow
       @out_dir = 'dist'
     end
 
-    def add_packages
-      %x( sh "#{File.join(__dir__, 'install.sh')}" )
-    end
-
     def create_nodemon_config
       config = 'nodemon.json'
       file = ServiceNow::Utils.new.fetch_file 'templates', config
@@ -34,19 +30,13 @@ module ServiceNow
     end
 
     def init
-      add_packages
       make_configs
-      sync
     end
 
     def make_configs
       create_nodemon_config
       create_prettier_config
       create_tsconfig
-    end
-
-    def sync
-      %x( sh "#{File.join(__dir__, 'sync.sh')}" )
     end
 
     def transpile
