@@ -9,6 +9,10 @@ module ServiceNow
       FileUtils.rm_rf(dir)
     end
 
+    def has_file(file)
+      File.file?("#{file}")
+    end
+
     def fetch_file(dir, file)
       File.read(File.join(File.expand_path('..', __dir__), "#{dir}/#{file}"))
     end

@@ -29,14 +29,34 @@ module ServiceNow
       ServiceNow::Utils.new.replace_content config
     end
 
+    def has_prettier_config
+      types = [
+        '.prettierrc',
+        '.prettierrc.json',
+        '.prettierrc.yml',
+        '.prettierrc.yaml',
+        '.prettierrc.json5',
+        '.prettierrc.js',
+        '.prettierrc.cjs',
+        'prettier.config.js',
+        'prettier.config.cjs',
+        '.prettierrc.toml'
+      ]
+      types.any? do |item|
+        ServiceNow::Utils.new.has_file item
+      end
+    end
+
     def init
       make_configs
     end
 
     def make_configs
       create_nodemon_config
-      create_prettier_config
       create_tsconfig
+      if has_prettier_config === false
+        create_prettier_config
+      end
     end
 
     def transpile
