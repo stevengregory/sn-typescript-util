@@ -103,6 +103,14 @@ Sync new instance-based `src` files to the `ts` directory.
 snts --sync
 ```
 
+### Version
+
+Output the version number.
+
+```bash
+snts --version
+```
+
 **[Back to top](#table-of-contents)**
 
 ## License
