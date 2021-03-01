@@ -5,10 +5,6 @@ require 'json'
 
 module ServiceNow
   class Utils
-    def clean_build(dir)
-      FileUtils.rm_rf(dir)
-    end
-
     def has_file(file)
       File.file?("#{file}")
     end
