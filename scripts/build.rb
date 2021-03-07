@@ -29,8 +29,8 @@ module ServiceNow
       ServiceNow::Utils.new.replace_content config
     end
 
-    def has_prettier_config
-      types = [
+    def get_config_types
+      [
         '.prettierrc',
         '.prettierrc.json',
         '.prettierrc.yml',
@@ -42,7 +42,10 @@ module ServiceNow
         'prettier.config.cjs',
         '.prettierrc.toml'
       ]
-      types.any? do |item|
+    end
+
+    def has_prettier_config
+      get_config_types.any? do |item|
         ServiceNow::Utils.new.has_file item
       end
     end
