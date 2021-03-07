@@ -12,7 +12,7 @@ const { program } = require('commander');
 const { bold, red } = require('colorette');
 
 (() => {
-  return hasApplication() && init();
+  return init();
 })();
 
 function getErrorMsg() {
@@ -88,7 +88,7 @@ function init() {
     'sync new instance-based src files to the ts directory'
   );
   program.parse(process.argv).opts();
-  getOption(program.opts());
+  return hasApplication() && getOption(program.opts());
 }
 
 function progressComplete(bar) {
