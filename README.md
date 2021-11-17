@@ -77,6 +77,10 @@ Build project utility files and package dependencies. Creates a `ts` directory f
 
 ```bash
 snts --build
+
+# or
+
+snts -b
 ```
 
 ### Compile
@@ -85,6 +89,10 @@ Compile TypeScript files in the `ts` directory to JavaScript ES5 and moves them 
 
 ```bash
 snts --compile
+
+# or
+
+snts -c
 ```
 
 ### Help
@@ -93,6 +101,10 @@ Display help for the command.
 
 ```bash
 snts --help
+
+# or
+
+snts -h
 ```
 
 ### Sync
@@ -101,6 +113,10 @@ Sync new instance-based `src` files to the `ts` directory.
 
 ```bash
 snts --sync
+
+# or
+
+snts -s
 ```
 
 ### Version
@@ -109,6 +125,10 @@ Output the version number.
 
 ```bash
 snts --version
+
+# or
+
+snts -V
 ```
 
 **[Back to top](#table-of-contents)**
