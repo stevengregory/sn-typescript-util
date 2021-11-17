@@ -16,14 +16,10 @@ const { bold, red } = require('colorette');
 })();
 
 function getErrorMsg() {
-  return console.error(
-    bold(
-      red(
-        'No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n' +
-          'https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html'
-      )
-    )
-  );
+  var msg =
+    'No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n' +
+    'https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html';
+  return console.error(bold(red(msg)));
 }
 
 function getOption(opts) {
