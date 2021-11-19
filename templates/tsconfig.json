@@ -4,12 +4,13 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "*": ["./lib/dts/index.d.ts"]
+      "*": ["./lib/dts/*.d.ts"]
     }
   },
   "include": [
     "./@project/ts/**/*",
-    "./lib/dts/index.d.ts",
+    "./lib/dts/*.d.ts",
     "./@project/ts/Interfaces/*.ts"
-  ]
+  ],
+  "exclude": ["node_modules"]
 }
