@@ -15,10 +15,23 @@ const { bold, red } = require('colorette');
   return init();
 })();
 
+function getBuildName() {
+  const defaultBuild = 'rome';
+  try {
+    const workspace = JSON.parse(getWorkspaceConfig());
+    const app = workspace.ACTIVE_APPLICATION;
+    const build = workspace.ALL_APPLICATIONS[app].BUILD_NAME;
+    return Object.entries(build).length !== 0
+      ? build.toLowerCase()
+      : defaultBuild;
+  } catch (e) {
+    return defaultBuild;
+  }
+}
+
 function getErrorMsg() {
-  var msg =
-    'No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n' +
-    'https://docs.servicenow.com/bundle/quebec-application-development/page/build/applications/task/create-project.html';
+  var url = `https://docs.servicenow.com/bundle/${getBuildName()}-application-development/page/build/applications/task/create-project.html`;
+  var msg = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
   return console.error(bold(red(msg)));
 }
 
@@ -53,10 +66,13 @@ function getProgressBar() {
   });
 }
 
+function getWorkspaceConfig() {
+  return fs.readFileSync('./system/sn-workspace.json');
+}
+
 function hasApplication() {
   try {
-    const workspace = fs.readFileSync('system/sn-workspace.json');
-    const app = JSON.parse(workspace).ACTIVE_APPLICATION;
+    const app = JSON.parse(getWorkspaceConfig()).ACTIVE_APPLICATION;
     return Object.entries(app).length === 0 ? getErrorMsg() : true;
   } catch (e) {
     getErrorMsg();
