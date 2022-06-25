@@ -57,6 +57,10 @@ After installation & setup, simply run the `watch` script to start looking for T
 
 ```bash
 npm run watch
+
+# or
+
+yarn watch
 ```
 
 Any JavaScript ES2015 (ES6) code added will get converted down to ES5 and moved to the `src` directory. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
