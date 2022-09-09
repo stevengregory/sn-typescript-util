@@ -16,7 +16,7 @@ const { bold, red } = require('colorette');
 })();
 
 function getBuildName() {
-  const defaultBuild = 'rome';
+  const defaultBuild = 'tokyo';
   try {
     const workspace = JSON.parse(getWorkspaceConfig());
     const app = workspace.ACTIVE_APPLICATION;
