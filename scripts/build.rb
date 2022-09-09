@@ -65,7 +65,7 @@ module ServiceNow
     def transpile
       %x( tsc )
       %x( prettier --write "#{@out_dir}/**/*.js" )
-      %x( rsync -av --progress -a --exclude="Interfaces" "#{@out_dir}/" "#{@app}/src" )
+      %x( rsync -au --exclude="Interfaces" "#{@out_dir}/*" "#{@app}/src" )
     end
   end
 end
