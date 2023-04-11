@@ -2,14 +2,13 @@
 
 const childProcess = require('child_process');
 const cliProgress = require('cli-progress');
-const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const exec = util.promisify(childProcess.exec);
 const { description, version } = require('./../package.json');
 const { program } = require('commander');
-const { bold, red } = require('colorette');
+const { bold, cyan, red } = require('colorette');
 
 (() => {
   return init();
@@ -58,7 +57,7 @@ function getProgressBar() {
   return new cliProgress.SingleBar({
     format:
       'CLI Progress |' +
-      colors.cyan('{bar}') +
+      cyan('{bar}') +
       '| {percentage}% || {value}/{total} Chunks',
     barCompleteChar: '\u2588',
     barIncompleteChar: '\u2591',

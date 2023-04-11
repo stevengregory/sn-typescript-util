@@ -21,7 +21,6 @@
     "@types/servicenow": "^10.0.1",
     "cli-progress": "^3.11.2",
     "colorette": "^2.0.19",
-    "colors": "1.4.0",
     "commander": "^9.4.0",
     "nodemon": "^2.0.19",
     "npm-add-script": "^1.1.0",
