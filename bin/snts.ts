@@ -75,7 +75,7 @@ function hasApplication() {
     return Object.entries(app).length === 0 ? getErrorMsg() : true;
   } catch (e) {
     getErrorMsg();
-    return process.exit(e.code);
+    return process.exit(1);
   }
 }
 
