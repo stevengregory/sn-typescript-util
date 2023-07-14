@@ -99,27 +99,27 @@ async function runInstall() {
   s.start('Installing packages');
   return await exec(getFilePath('install.sh'), (stdout) => {
     stopPrompt(s, 'Packages installed');
-    outro('Complete');
+    outro('Completed');
     return stdout;
   });
 }
 
 async function runProgressScript(file) {
-  introPrompt('Start sync');
+  introPrompt('Sync started');
   const s = spinner();
   s.start('Processing');
   return childProcess.exec(getFilePath(file), (stdout) => {
-    stopPrompt(s, 'Complete');
+    stopPrompt(s, 'Completed');
     return stdout;
   });
 }
 
 async function runScript(file) {
-  introPrompt('Start compile');
+  introPrompt('Compile started');
   const s = spinner();
   s.start('Processing');
   return childProcess.exec(getFilePath(file), (stdout) => {
-    stopPrompt(s, 'Complete');
+    stopPrompt(s, 'Completed');
     return stdout;
   });
 }
@@ -131,14 +131,8 @@ async function runSync() {
   });
 }
 
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
 async function startBuild() {
-  introPrompt('Start build');
+  introPrompt('Build started');
   const s = spinner();
   s.start('Installing configs');
   return await exec(getFilePath('init.rb'), (stdout) => {
