@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const childProcess = require('child_process');
-const cliProgress = require('cli-progress');
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
@@ -9,10 +8,7 @@ const exec = util.promisify(childProcess.exec);
 const { description, version } = require('./../package.json');
 const { program } = require('commander');
 const { bold, cyan, red } = require('colorette');
-
-(() => {
-  return init();
-})();
+const { cancel, intro, outro, spinner } = require('@clack/prompts');
 
 function getBuildName() {
   const defaultBuild = 'tokyo';
@@ -34,6 +30,10 @@ function getErrorMsg() {
   return console.error(bold(red(msg)));
 }
 
+function getFilePath(file) {
+  return `${path.join(__dirname, '../scripts')}/${file}`;
+}
+
 function getOption(opts) {
   const option = Object.keys(opts).toString();
   const options = {
@@ -53,18 +53,6 @@ function getOption(opts) {
   return (options[option] || options['default'])();
 }
 
-function getProgressBar() {
-  return new cliProgress.SingleBar({
-    format:
-      'CLI Progress |' +
-      cyan('{bar}') +
-      '| {percentage}% || {value}/{total} Chunks',
-    barCompleteChar: '\u2588',
-    barIncompleteChar: '\u2591',
-    hideCursor: true
-  });
-}
-
 function getWorkspaceConfig() {
   return fs.readFileSync('./system/sn-workspace.json');
 }
@@ -79,9 +67,9 @@ function hasApplication() {
   }
 }
 
-function getFilePath(file) {
-  return `${path.join(__dirname, '../scripts')}/${file}`;
-}
+(() => {
+  return init();
+})();
 
 function init() {
   program.description(description);
@@ -102,57 +90,64 @@ function init() {
   return hasApplication() && getOption(program.opts());
 }
 
-function progressComplete(bar) {
-  bar.update(100);
-  bar.stop();
+function introPrompt(msg) {
+  return intro(msg);
 }
 
-function progressStart(bar) {
-  bar.start(100, 0);
-  bar.update(1);
-}
-
-async function runConfigs(bar) {
-  return await exec(getFilePath('init.rb'), (stdout) => {
-    bar.update(10);
-    runSync(bar);
-    return stdout;
-  });
-}
-
-async function runInstall(bar) {
-  bar.update(50);
+async function runInstall() {
+  const s = spinner();
+  s.start('Installing packages');
   return await exec(getFilePath('install.sh'), (stdout) => {
-    progressComplete(bar);
+    stopPrompt(s, 'Packages installed');
+    outro('Complete');
     return stdout;
   });
 }
 
-function runProgressScript(file) {
-  var bar = getProgressBar();
-  progressStart(bar);
+async function runProgressScript(file) {
+  introPrompt('Start sync');
+  const s = spinner();
+  s.start('Processing');
   return childProcess.exec(getFilePath(file), (stdout) => {
-    progressComplete(bar);
+    stopPrompt(s, 'Complete');
     return stdout;
   });
 }
 
-function runScript(file) {
+async function runScript(file) {
+  introPrompt('Start compile');
+  const s = spinner();
+  s.start('Processing');
   return childProcess.exec(getFilePath(file), (stdout) => {
+    stopPrompt(s, 'Complete');
     return stdout;
   });
 }
 
-async function runSync(bar) {
+async function runSync() {
   return await exec(getFilePath('sync.sh'), (stdout) => {
-    bar.update(25);
-    runInstall(bar);
+    runInstall();
     return stdout;
+  });
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
   });
 }
 
 async function startBuild() {
-  var bar = getProgressBar();
-  progressStart(bar);
-  return await Promise.all([runConfigs(bar)]);
+  introPrompt('Start build');
+  const s = spinner();
+  s.start('Installing configs');
+  return await exec(getFilePath('init.rb'), (stdout) => {
+    stopPrompt(s, 'Configs installed');
+    runSync();
+    return stdout;
+  });
+}
+
+function stopPrompt(spinner, msg) {
+  return spinner.stop(msg);
 }
