@@ -11,7 +11,7 @@ const { bold, cyan, red } = require('colorette');
 const { cancel, intro, outro, spinner } = require('@clack/prompts');
 
 function getBuildName() {
-  const defaultBuild = 'tokyo';
+  const defaultBuild = 'utah';
   try {
     const workspace = JSON.parse(getWorkspaceConfig());
     const app = workspace.ACTIVE_APPLICATION;
