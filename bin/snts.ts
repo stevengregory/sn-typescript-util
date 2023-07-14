@@ -95,8 +95,7 @@ function introPrompt(msg) {
 }
 
 async function runInstall() {
-  const s = spinner();
-  s.start('Installing packages');
+  const s = startPrompts('Installing packages', null);
   return await exec(getFilePath('install.sh'), (stdout) => {
     stopPrompt(s, 'Packages installed');
     outro('Completed');
@@ -105,9 +104,7 @@ async function runInstall() {
 }
 
 async function runProgressScript(file) {
-  introPrompt('Sync started');
-  const s = spinner();
-  s.start('Processing');
+  const s = startPrompts('Processing', 'Sync started');
   return childProcess.exec(getFilePath(file), (stdout) => {
     stopPrompt(s, 'Completed');
     return stdout;
@@ -115,9 +112,7 @@ async function runProgressScript(file) {
 }
 
 async function runScript(file) {
-  introPrompt('Compile started');
-  const s = spinner();
-  s.start('Processing');
+  const s = startPrompts('Processing', 'Compile started');
   return childProcess.exec(getFilePath(file), (stdout) => {
     stopPrompt(s, 'Completed');
     return stdout;
@@ -132,14 +127,19 @@ async function runSync() {
 }
 
 async function startBuild() {
-  introPrompt('Build started');
-  const s = spinner();
-  s.start('Installing configs');
+  const s = startPrompts('Installing configs', 'Build started');
   return await exec(getFilePath('init.rb'), (stdout) => {
     stopPrompt(s, 'Configs installed');
     runSync();
     return stdout;
   });
+}
+
+function startPrompts(start, intro) {
+  intro && introPrompt(intro);
+  const s = spinner();
+  s.start(start);
+  return s;
 }
 
 function stopPrompt(spinner, msg) {
