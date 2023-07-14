@@ -10,6 +10,31 @@ const { program } = require('commander');
 const { bold, cyan, red } = require('colorette');
 const { cancel, intro, outro, spinner } = require('@clack/prompts');
 
+async function doBuild() {
+  const s = startPrompts('Installing configs', 'Build started');
+  return await exec(getFilePath('init.rb'), (stdout) => {
+    stopPrompt(s, 'Configs installed');
+    runSync();
+    return stdout;
+  });
+}
+
+async function doCompile() {
+  const s = startPrompts('Processing', 'Compile started');
+  return await exec(getFilePath('compile.rb'), (stdout) => {
+    stopPrompt(s, 'Completed');
+    return stdout;
+  });
+}
+
+async function doSync() {
+  const s = startPrompts('Processing', 'Sync started');
+  return await exec(getFilePath('sync.sh'), (stdout) => {
+    stopPrompt(s, 'Completed');
+    return stdout;
+  });
+}
+
 function getBuildName() {
   const defaultBuild = 'utah';
   try {
@@ -38,13 +63,13 @@ function getOption(opts) {
   const option = Object.keys(opts).toString();
   const options = {
     build: () => {
-      startBuild();
+      doBuild();
     },
     compile: () => {
-      runScript('compile.rb');
+      doCompile();
     },
     sync: () => {
-      runProgressScript('sync.sh');
+      doSync();
     },
     default: () => {
       program.help();
@@ -103,34 +128,9 @@ async function runInstall() {
   });
 }
 
-async function runProgressScript(file) {
-  const s = startPrompts('Processing', 'Sync started');
-  return childProcess.exec(getFilePath(file), (stdout) => {
-    stopPrompt(s, 'Completed');
-    return stdout;
-  });
-}
-
-async function runScript(file) {
-  const s = startPrompts('Processing', 'Compile started');
-  return childProcess.exec(getFilePath(file), (stdout) => {
-    stopPrompt(s, 'Completed');
-    return stdout;
-  });
-}
-
 async function runSync() {
   return await exec(getFilePath('sync.sh'), (stdout) => {
     runInstall();
-    return stdout;
-  });
-}
-
-async function startBuild() {
-  const s = startPrompts('Installing configs', 'Build started');
-  return await exec(getFilePath('init.rb'), (stdout) => {
-    stopPrompt(s, 'Configs installed');
-    runSync();
     return stdout;
   });
 }
