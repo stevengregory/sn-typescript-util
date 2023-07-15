@@ -36,11 +36,11 @@ async function doSync() {
 }
 
 function getBuildName() {
-  const defaultBuild = 'utah';
+  const defaultBuild: string = 'utah';
   try {
     const workspace = JSON.parse(getWorkspaceConfig());
-    const app = workspace.ACTIVE_APPLICATION;
-    const build = workspace.ALL_APPLICATIONS[app].BUILD_NAME;
+    const app: string = workspace.ACTIVE_APPLICATION;
+    const build: string = workspace.ALL_APPLICATIONS[app].BUILD_NAME;
     return Object.entries(build).length !== 0
       ? build.toLowerCase()
       : defaultBuild;
@@ -50,16 +50,16 @@ function getBuildName() {
 }
 
 function getErrorMsg() {
-  var url = `https://docs.servicenow.com/bundle/${getBuildName()}-application-development/page/build/applications/task/create-project.html`;
-  var msg = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
+  var url: string = `https://docs.servicenow.com/bundle/${getBuildName()}-application-development/page/build/applications/task/create-project.html`;
+  var msg: string = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
   return console.error(bold(red(msg)));
 }
 
-function getFilePath(file) {
+function getFilePath(file: string) {
   return `${path.join(__dirname, '../scripts')}/${file}`;
 }
 
-function getOption(opts) {
+function getOption(opts: string) {
   const option = Object.keys(opts).toString();
   const options = {
     build: () => {
@@ -115,7 +115,7 @@ function init() {
   return hasApplication() && getOption(program.opts());
 }
 
-function introPrompt(msg) {
+function introPrompt(msg: string) {
   return intro(msg);
 }
 
@@ -135,13 +135,13 @@ async function runSync() {
   });
 }
 
-function startPrompts(start, intro) {
+function startPrompts(start: string, intro: string) {
   intro && introPrompt(intro);
   const s = spinner();
   s.start(start);
   return s;
 }
 
-function stopPrompt(spinner, msg) {
+function stopPrompt(spinner: any, msg: string) {
   return spinner.stop(msg);
 }
