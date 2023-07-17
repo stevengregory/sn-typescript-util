@@ -6,9 +6,6 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { bold, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
-const program = new Command();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 async function doBuild() {
     const s = startPrompts('Installing configs', 'Build started');
     return await execFile(getFilePath('init.rb'), (stdout) => {
@@ -51,10 +48,12 @@ function getErrorMsg() {
     return console.error(bold(red(msg)));
 }
 function getFilePath(file) {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
     return `${path.join(__dirname, '../scripts')}/${file}`;
 }
-function getOption(opts) {
-    const option = Object.keys(opts).toString();
+function getOption(program) {
+    const option = Object.keys(program.opts).toString();
     const options = {
         build: () => {
             doBuild();
@@ -92,6 +91,7 @@ async function hasApplication() {
     return init();
 })();
 async function init() {
+    const program = new Command();
     const info = await getPackageInfo();
     program.description(info.description);
     program.version(info.version);
@@ -99,7 +99,7 @@ async function init() {
     program.option('-c, --compile', 'compile TypeScript files to JavaScript & move to src');
     program.option('-s, --sync', 'sync new instance-based src files to the ts directory');
     program.parse(process.argv).opts();
-    return hasApplication() && getOption(program.opts());
+    return hasApplication() && getOption(program);
 }
 function introPrompt(msg) {
     return intro(msg);
