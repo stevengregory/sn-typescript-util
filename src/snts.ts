@@ -9,8 +9,6 @@ import { bold, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
 
 const program = new Command();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 async function doBuild() {
   const s = startPrompts('Installing configs', 'Build started');
@@ -58,6 +56,8 @@ function getErrorMsg() {
 }
 
 function getFilePath(file: string) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
   return `${path.join(__dirname, '../scripts')}/${file}`;
 }
 
