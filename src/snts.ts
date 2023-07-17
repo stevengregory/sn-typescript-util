@@ -8,8 +8,6 @@ import { fileURLToPath } from 'url';
 import { bold, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
 
-const program = new Command();
-
 async function doBuild() {
   const s = startPrompts('Installing configs', 'Build started');
   return await execFile(getFilePath('init.rb'), (stdout) => {
@@ -61,8 +59,8 @@ function getFilePath(file: string) {
   return `${path.join(__dirname, '../scripts')}/${file}`;
 }
 
-function getOption(opts: any) {
-  const option = Object.keys(opts).toString();
+function getOption(program: any) {
+  const option = Object.keys(program.opts).toString();
   const options = {
     build: () => {
       doBuild();
@@ -104,6 +102,7 @@ async function hasApplication() {
 })();
 
 async function init() {
+  const program = new Command();
   const info = await getPackageInfo();
   program.description(info.description);
   program.version(info.version);
@@ -120,7 +119,7 @@ async function init() {
     'sync new instance-based src files to the ts directory'
   );
   program.parse(process.argv).opts();
-  return hasApplication() && getOption(program.opts());
+  return hasApplication() && getOption(program);
 }
 
 function introPrompt(msg: string) {
