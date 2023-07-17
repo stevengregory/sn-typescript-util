@@ -53,7 +53,8 @@ function getFilePath(file) {
     return `${path.join(__dirname, '../scripts')}/${file}`;
 }
 function getOption(program) {
-    const option = Object.keys(program.opts).toString();
+    program.parse(process.argv).opts();
+    const option = Object.keys(program.opts()).toString();
     const options = {
         build: () => {
             doBuild();
@@ -98,7 +99,6 @@ async function init() {
     program.option('-b, --build', 'build project utility files & package dependencies');
     program.option('-c, --compile', 'compile TypeScript files to JavaScript & move to src');
     program.option('-s, --sync', 'sync new instance-based src files to the ts directory');
-    program.parse(process.argv).opts();
     return hasApplication() && getOption(program);
 }
 function introPrompt(msg) {

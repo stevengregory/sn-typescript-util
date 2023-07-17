@@ -60,7 +60,8 @@ function getFilePath(file: string) {
 }
 
 function getOption(program: any) {
-  const option = Object.keys(program.opts).toString();
+  program.parse(process.argv).opts();
+  const option = Object.keys(program.opts()).toString();
   const options = {
     build: () => {
       doBuild();
@@ -118,7 +119,6 @@ async function init() {
     '-s, --sync',
     'sync new instance-based src files to the ts directory'
   );
-  program.parse(process.argv).opts();
   return hasApplication() && getOption(program);
 }
 
