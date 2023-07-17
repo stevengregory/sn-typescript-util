@@ -1,16 +1,17 @@
 #!/usr/bin/env node
-const childProcess = require('child_process');
-const fs = require('fs');
-const path = require('path');
-const util = require('util');
-const exec = util.promisify(childProcess.exec);
-const { description, version } = require('./../package.json');
-const { program } = require('commander');
-const { bold, cyan, red } = require('colorette');
-const { cancel, intro, outro, spinner } = require('@clack/prompts');
+import { Command } from 'commander';
+import { execFile } from 'node:child_process';
+import path from 'path';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { bold, red } from 'colorette';
+import { intro, outro, spinner } from '@clack/prompts';
+const program = new Command();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 async function doBuild() {
     const s = startPrompts('Installing configs', 'Build started');
-    return await exec(getFilePath('init.rb'), (stdout) => {
+    return await execFile(getFilePath('init.rb'), (stdout) => {
         stopPrompt(s, 'Configs installed');
         runSync();
         return stdout;
@@ -18,22 +19,22 @@ async function doBuild() {
 }
 async function doCompile() {
     const s = startPrompts('Processing', 'Compile started');
-    return await exec(getFilePath('compile.rb'), (stdout) => {
+    return await execFile(getFilePath('compile.rb'), (stdout) => {
         stopPrompt(s, 'Completed');
         return stdout;
     });
 }
 async function doSync() {
     const s = startPrompts('Processing', 'Sync started');
-    return await exec(getFilePath('sync.sh'), (stdout) => {
+    return await execFile(getFilePath('sync.sh'), (stdout) => {
         stopPrompt(s, 'Completed');
         return stdout;
     });
 }
-function getBuildName() {
+async function getBuildName() {
     const defaultBuild = 'utah';
     try {
-        const workspace = JSON.parse(getWorkspaceConfig());
+        const workspace = await getWorkspaceFile();
         const app = workspace.ACTIVE_APPLICATION;
         const build = workspace.ALL_APPLICATIONS[app].BUILD_NAME;
         return Object.entries(build).length !== 0
@@ -70,25 +71,30 @@ function getOption(opts) {
     };
     return (options[option] || options['default'])();
 }
-function getWorkspaceConfig() {
-    return fs.readFileSync('./system/sn-workspace.json');
+async function getPackageInfo() {
+    return JSON.parse(readFileSync('./package.json').toString());
 }
-function hasApplication() {
+async function getWorkspaceFile() {
+    return JSON.parse(readFileSync('./system/sn-workspace.json').toString())
+        .ACTIVE_APPLICATION;
+}
+async function hasApplication() {
     try {
-        const app = JSON.parse(getWorkspaceConfig()).ACTIVE_APPLICATION;
-        return Object.entries(app).length === 0 ? getErrorMsg() : true;
+        const workspace = await getWorkspaceFile();
+        return Object.entries(workspace).length === 0 ? getErrorMsg() : true;
     }
     catch (e) {
         getErrorMsg();
         return process.exit(1);
     }
 }
-(() => {
+(async () => {
     return init();
 })();
-function init() {
-    program.description(description);
-    program.version(version);
+async function init() {
+    const info = await getPackageInfo();
+    program.description(info.description);
+    program.version(info.version);
     program.option('-b, --build', 'build project utility files & package dependencies');
     program.option('-c, --compile', 'compile TypeScript files to JavaScript & move to src');
     program.option('-s, --sync', 'sync new instance-based src files to the ts directory');
@@ -100,14 +106,14 @@ function introPrompt(msg) {
 }
 async function runInstall() {
     const s = startPrompts('Installing packages', null);
-    return await exec(getFilePath('install.sh'), (stdout) => {
+    return await execFile(getFilePath('install.sh'), (stdout) => {
         stopPrompt(s, 'Packages installed');
         outro('Completed');
         return stdout;
     });
 }
 async function runSync() {
-    return await exec(getFilePath('sync.sh'), (stdout) => {
+    return await execFile(getFilePath('sync.sh'), (stdout) => {
         runInstall();
         return stdout;
     });

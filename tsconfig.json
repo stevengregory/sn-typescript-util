@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "NodeNext",
     "esModuleInterop": true,
     "outDir": "bin",
-    "rootDir": "src",
+    "resolveJsonModule": true,
+    "rootDir": "./src",
     "skipLibCheck": true
   },
   "include": ["src"]

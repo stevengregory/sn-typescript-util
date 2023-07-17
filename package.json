@@ -3,7 +3,7 @@
   "version": "1.1.1",
   "description": "A TypeScript utility for ServiceNow developers using VS Code",
   "bin": {
-    "snts": "bin/snts.js"
+    "snts": "bin/src/snts.js"
   },
   "keywords": [
     "ServiceNow",
@@ -16,6 +16,7 @@
     "type": "git",
     "url": "https://github.com/stevengregory/sn-typescript-util.git"
   },
+  "type": "module",
   "dependencies": {
     "@clack/prompts": "^0.6.3",
     "@types/node": "^20.4.2",
