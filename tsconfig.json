@@ -5,7 +5,7 @@
     "esModuleInterop": true,
     "outDir": "bin",
     "resolveJsonModule": true,
-    "rootDir": "./src",
+    "rootDir": "src",
     "skipLibCheck": true
   },
   "include": ["src"]
