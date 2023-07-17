@@ -53,10 +53,10 @@ function getErrorMsg() {
   return console.error(bold(red(msg)));
 }
 
-function getFilePath(file: string) {
+function getFilePath(file: string, dir: string = 'scripts') {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
-  return `${path.join(__dirname, '../scripts')}/${file}`;
+  return `${path.join(__dirname, `../${dir}`)}/${file}`;
 }
 
 function getOption(program: any) {
@@ -80,7 +80,7 @@ function getOption(program: any) {
 }
 
 async function getPackageInfo() {
-  return JSON.parse(readFileSync('./package.json').toString());
+  return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
 
 async function getWorkspaceFile() {
