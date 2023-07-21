@@ -31,7 +31,7 @@ async function doSync() {
 function getBuildName() {
     const defaultBuild = 'utah';
     try {
-        const workspace = getWorkspaceFile();
+        const workspace = getWorkspace();
         const app = workspace.ACTIVE_APPLICATION;
         const build = workspace.ALL_APPLICATIONS[app].BUILD_NAME;
         return Object.entries(build).length !== 0
@@ -74,14 +74,14 @@ function getOption(program) {
 async function getPackageInfo() {
     return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
-function getWorkspaceFile() {
-    return JSON.parse(readFileSync('./system/sn-workspace.json').toString())
-        .ACTIVE_APPLICATION;
+function getWorkspace() {
+    return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
 }
 async function hasApplication() {
     try {
-        const workspace = await getWorkspaceFile();
-        return Object.entries(workspace).length === 0 ? getErrorMsg() : true;
+        const workspace = await getWorkspace();
+        var app = workspace.ACTIVE_APPLICATION;
+        return Object.entries(app).length === 0 ? getErrorMsg() : true;
     }
     catch (e) {
         getErrorMsg();

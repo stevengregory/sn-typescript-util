@@ -7,6 +7,7 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { bold, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
+import { Workspace } from './workspace.js';
 
 async function doBuild() {
   const s = startPrompts('Installing configs', 'Build started');
@@ -36,7 +37,7 @@ async function doSync() {
 function getBuildName() {
   const defaultBuild: string = 'utah';
   try {
-    const workspace = getWorkspaceFile();
+    const workspace: Workspace = getWorkspace();
     const app: string = workspace.ACTIVE_APPLICATION;
     const build: string = workspace.ALL_APPLICATIONS[app].BUILD_NAME;
     return Object.entries(build).length !== 0
@@ -83,15 +84,15 @@ async function getPackageInfo() {
   return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
 
-function getWorkspaceFile() {
-  return JSON.parse(readFileSync('./system/sn-workspace.json').toString())
-    .ACTIVE_APPLICATION;
+function getWorkspace() {
+  return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
 }
 
 async function hasApplication() {
   try {
-    const workspace = await getWorkspaceFile();
-    return Object.entries(workspace).length === 0 ? getErrorMsg() : true;
+    const workspace: Workspace = await getWorkspace();
+    var app: string = workspace.ACTIVE_APPLICATION;
+    return Object.entries(app).length === 0 ? getErrorMsg() : true;
   } catch (e) {
     getErrorMsg();
     return process.exit(1);
