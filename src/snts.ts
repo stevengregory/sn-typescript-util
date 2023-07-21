@@ -136,7 +136,9 @@ async function runInstall() {
 }
 
 async function runSync() {
+  const s = startPrompts('Syncing', null);
   return await execFile(getFilePath('sync.sh'), (stdout) => {
+    stopPrompt(s, 'Sync completed');
     runInstall();
     return stdout;
   });
