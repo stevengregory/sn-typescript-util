@@ -55,9 +55,9 @@ function getErrorMsg() {
 }
 
 function getFilePath(file: string, dir: string = 'scripts') {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  return `${path.join(__dirname, `../${dir}`)}/${file}`;
+  const fileName = fileURLToPath(import.meta.url);
+  const dirName = path.dirname(fileName);
+  return `${path.join(dirName, `../${dir}`)}/${file}`;
 }
 
 function getOption(program: any) {
