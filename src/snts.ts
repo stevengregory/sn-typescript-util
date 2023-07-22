@@ -26,6 +26,26 @@ async function doCompile() {
   });
 }
 
+function doOptions(program: any) {
+  program.parse(process.argv).opts();
+  const option = Object.keys(program.opts()).toString();
+  const options = {
+    build: () => {
+      doBuild();
+    },
+    compile: () => {
+      doCompile();
+    },
+    sync: () => {
+      doSync();
+    },
+    default: () => {
+      program.help();
+    }
+  };
+  return ((hasApplication() && options[option]) || options['default'])();
+}
+
 async function doSync() {
   const s = startPrompts('Processing', 'Sync started');
   return await execFile(getFilePath('sync.sh'), (stdout: any) => {
@@ -58,26 +78,6 @@ function getFilePath(file: string, dir: string = 'scripts') {
   const fileName = fileURLToPath(import.meta.url);
   const dirName = path.dirname(fileName);
   return `${path.join(dirName, `../${dir}`)}/${file}`;
-}
-
-function getOption(program: any) {
-  program.parse(process.argv).opts();
-  const option = Object.keys(program.opts()).toString();
-  const options = {
-    build: () => {
-      doBuild();
-    },
-    compile: () => {
-      doCompile();
-    },
-    sync: () => {
-      doSync();
-    },
-    default: () => {
-      program.help();
-    }
-  };
-  return (options[option] || options['default'])();
 }
 
 async function getPackageInfo() {
@@ -120,7 +120,7 @@ async function init() {
     '-s, --sync',
     'sync new instance-based src files to the ts directory'
   );
-  return hasApplication() && getOption(program);
+  return doOptions(program);
 }
 
 function introPrompt(msg: string) {

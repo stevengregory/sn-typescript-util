@@ -21,6 +21,25 @@ async function doCompile() {
         return stdout;
     });
 }
+function doOptions(program) {
+    program.parse(process.argv).opts();
+    const option = Object.keys(program.opts()).toString();
+    const options = {
+        build: () => {
+            doBuild();
+        },
+        compile: () => {
+            doCompile();
+        },
+        sync: () => {
+            doSync();
+        },
+        default: () => {
+            program.help();
+        }
+    };
+    return ((hasApplication() && options[option]) || options['default'])();
+}
 async function doSync() {
     const s = startPrompts('Processing', 'Sync started');
     return await execFile(getFilePath('sync.sh'), (stdout) => {
@@ -52,25 +71,6 @@ function getFilePath(file, dir = 'scripts') {
     const dirName = path.dirname(fileName);
     return `${path.join(dirName, `../${dir}`)}/${file}`;
 }
-function getOption(program) {
-    program.parse(process.argv).opts();
-    const option = Object.keys(program.opts()).toString();
-    const options = {
-        build: () => {
-            doBuild();
-        },
-        compile: () => {
-            doCompile();
-        },
-        sync: () => {
-            doSync();
-        },
-        default: () => {
-            program.help();
-        }
-    };
-    return (options[option] || options['default'])();
-}
 async function getPackageInfo() {
     return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
@@ -99,7 +99,7 @@ async function init() {
     program.option('-b, --build', 'build project utility files & package dependencies');
     program.option('-c, --compile', 'compile TypeScript files to JavaScript & move to src');
     program.option('-s, --sync', 'sync new instance-based src files to the ts directory');
-    return hasApplication() && getOption(program);
+    return doOptions(program);
 }
 function introPrompt(msg) {
     return intro(msg);
