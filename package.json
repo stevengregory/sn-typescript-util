@@ -16,6 +16,10 @@
     "type": "git",
     "url": "https://github.com/stevengregory/sn-typescript-util.git"
   },
+  "scripts": {
+    "release": "./scripts/release.sh",
+    "watch": "tsc --watch"
+  },
   "type": "module",
   "dependencies": {
     "@clack/prompts": "^0.6.3",
