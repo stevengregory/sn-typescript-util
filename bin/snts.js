@@ -47,22 +47,8 @@ async function doSync() {
         return stdout;
     });
 }
-function getBuildName() {
-    const defaultBuild = 'utah';
-    try {
-        const workspace = getWorkspace();
-        const app = workspace.ACTIVE_APPLICATION;
-        const build = workspace.ALL_APPLICATIONS[app].BUILD_NAME;
-        return Object.entries(build).length !== 0
-            ? build.toLowerCase()
-            : defaultBuild;
-    }
-    catch (e) {
-        return defaultBuild;
-    }
-}
 function getErrorMsg() {
-    var url = `https://docs.servicenow.com/bundle/${getBuildName()}-application-development/page/build/applications/task/create-project.html`;
+    var url = `https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html`;
     var msg = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
     return console.error(bold(red(msg)));
 }

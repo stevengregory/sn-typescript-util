@@ -29,7 +29,7 @@ async function doCompile() {
 function doOptions(program: any) {
   program.parse(process.argv).opts();
   const option = Object.keys(program.opts()).toString();
-  const options = {
+  const options: any = {
     build: () => {
       doBuild();
     },
@@ -54,22 +54,8 @@ async function doSync() {
   });
 }
 
-function getBuildName() {
-  const defaultBuild: string = 'utah';
-  try {
-    const workspace: Workspace = getWorkspace();
-    const app: string = workspace.ACTIVE_APPLICATION;
-    const build: string = workspace.ALL_APPLICATIONS[app].BUILD_NAME;
-    return Object.entries(build).length !== 0
-      ? build.toLowerCase()
-      : defaultBuild;
-  } catch (e) {
-    return defaultBuild;
-  }
-}
-
 function getErrorMsg() {
-  var url: string = `https://docs.servicenow.com/bundle/${getBuildName()}-application-development/page/build/applications/task/create-project.html`;
+  var url: string = `https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html`;
   var msg: string = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
   return console.error(bold(red(msg)));
 }
@@ -145,7 +131,7 @@ async function runSync() {
   });
 }
 
-function startPrompts(start: string, intro: string) {
+function startPrompts(start: string, intro: string | null) {
   intro && introPrompt(intro);
   const s = spinner();
   s.start(start);
