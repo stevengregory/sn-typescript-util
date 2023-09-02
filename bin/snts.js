@@ -48,8 +48,8 @@ async function doSync() {
   });
 }
 function getErrorMsg() {
-  var url = `https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html`;
-  var msg = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
+  const url = `https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html`;
+  const msg = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
   return console.error(bold(red(msg)));
 }
 function getFilePath(file, dir = 'scripts') {
@@ -66,7 +66,7 @@ function getWorkspace() {
 async function hasApplication() {
   try {
     const workspace = await getWorkspace();
-    var app = workspace.ACTIVE_APPLICATION;
+    const app = workspace.ACTIVE_APPLICATION;
     return Object.entries(app).length === 0 ? getErrorMsg() : true;
   } catch (e) {
     getErrorMsg();

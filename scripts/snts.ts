@@ -55,8 +55,8 @@ async function doSync() {
 }
 
 function getErrorMsg() {
-  var url: string = `https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html`;
-  var msg: string = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
+  const url: string = `https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html`;
+  const msg: string = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
   return console.error(bold(red(msg)));
 }
 
@@ -77,7 +77,7 @@ function getWorkspace() {
 async function hasApplication() {
   try {
     const workspace: Workspace = await getWorkspace();
-    var app: string = workspace.ACTIVE_APPLICATION;
+    const app: string = workspace.ACTIVE_APPLICATION;
     return Object.entries(app).length === 0 ? getErrorMsg() : true;
   } catch (e) {
     getErrorMsg();
