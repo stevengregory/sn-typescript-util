@@ -17,6 +17,7 @@
     "url": "https://github.com/stevengregory/sn-typescript-util.git"
   },
   "scripts": {
+    "format": "prettier --write ./bin/*.js ./scripts/*.ts",
     "release": "./scripts/release.sh",
     "watch": "tsc --watch"
   },
