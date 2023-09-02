@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "NodeNext",
+    "noImplicitAny": true,
     "esModuleInterop": true,
     "outDir": "bin",
     "resolveJsonModule": true,
