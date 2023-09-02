@@ -9,8 +9,7 @@
   },
   "include": [
     "./@project/ts/**/*",
-    "./lib/dts/*.d.ts",
-    "./@project/ts/Interfaces/*.ts"
+    "./lib/dts/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }
