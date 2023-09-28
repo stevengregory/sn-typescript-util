@@ -3,7 +3,6 @@
 readonly packages=(
   'nodemon'
   'npm-add-script'
-  'prettier'
   'typescript'
 )
 
