@@ -1,8 +1,0 @@
-{
-  "verbose": true,
-  "ignore": ["Interfaces"],
-  "watch": [
-    "@project/ts/**/*.ts"
-  ],
-  "ext": "ts"
-}

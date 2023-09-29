@@ -6,14 +6,6 @@ module ServiceNow
   class Build
     def initialize
       @app = ServiceNow::Utils.new.get_application
-      @out_dir = 'dist'
-    end
-
-    def create_nodemon_config
-      config = 'nodemon.json'
-      file = ServiceNow::Utils.new.fetch_file 'templates', config
-      File.write(config, file)
-      ServiceNow::Utils.new.replace_content config
     end
 
     def create_prettier_config
@@ -55,7 +47,6 @@ module ServiceNow
     end
 
     def make_configs
-      create_nodemon_config
       create_tsconfig
       if has_prettier_config === false
         create_prettier_config
@@ -64,7 +55,6 @@ module ServiceNow
 
     def transpile
       %x( tsc )
-      %x( rsync -au --exclude="Interfaces" "#{@out_dir}/" "#{@app}/src" )
     end
   end
 end

@@ -1,15 +1,10 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "outDir": "dist",
+    "outDir": "@project/src",
     "baseUrl": ".",
-    "paths": {
-      "*": ["./lib/dts/*.d.ts"]
-    }
+    "skipLibCheck": true
   },
-  "include": [
-    "./@project/ts/**/*",
-    "./lib/dts/*.d.ts"
-  ],
+  "include": ["@project/ts/**/*", "lib/dts/*.d.ts"],
   "exclude": ["node_modules"]
 }
