@@ -113,20 +113,11 @@ function introPrompt(msg: string) {
   return intro(msg);
 }
 
-async function runInstall() {
-  const s = startPrompts('Installing packages', null);
-  return await execFile(getFilePath('install.sh'), (stdout) => {
-    stopPrompt(s, 'Packages installed');
-    outro('Completed');
-    return stdout;
-  });
-}
-
 async function runSync() {
   const s = startPrompts('Syncing', null);
   return await execFile(getFilePath('sync.sh'), (stdout) => {
     stopPrompt(s, 'Sync completed');
-    runInstall();
+    outro('Completed');
     return stdout;
   });
 }
