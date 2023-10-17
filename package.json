@@ -27,14 +27,14 @@
     "@clack/prompts": "^0.7.0",
     "@types/servicenow": "^10.0.2",
     "colorette": "^2.0.20",
-    "commander": "^11.0.0",
+    "commander": "^11.1.0",
     "npm-add-script": "^1.1.0",
     "typescript": "^5.2.2"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.7.3",
-    "@typescript-eslint/parser": "^6.5.0",
-    "bun-types": "^1.0.5-canary.20231006T140143",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "bun-types": "^1.0.6",
     "eslint": "^8.51.0",
     "prettier": "^3.0.3"
   }
