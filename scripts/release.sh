@@ -9,6 +9,8 @@ bump_version() {
 do_git_operation() {
   git commit -a -m "chore: bump the version"
   git tag $(get_package_version)
+  git push
+  git push origin $(get_package_version)
 }
 
 get_package_version() {
