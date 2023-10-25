@@ -11,7 +11,7 @@ import { Workspace } from './workspace.js';
 
 async function doBuild() {
   const s = startPrompts('Installing configs', 'Build started');
-  return await execFile(getFilePath('init.rb'), (stdout) => {
+  return await execFile(getFilePath('init.rb'), (stdout: unknown) => {
     stopPrompt(s, 'Configs installed');
     runSync();
     return stdout;
@@ -20,7 +20,7 @@ async function doBuild() {
 
 async function doCompile() {
   const s = startPrompts('Processing', 'Compile started');
-  return await execFile(getFilePath('compile.rb'), (stdout) => {
+  return await execFile(getFilePath('compile.rb'), (stdout: unknown) => {
     stopPrompt(s, 'Completed');
     return stdout;
   });
@@ -48,7 +48,7 @@ function doOptions(program: any) {
 
 async function doSync() {
   const s = startPrompts('Processing', 'Sync started');
-  return await execFile(getFilePath('sync.sh'), (stdout: any) => {
+  return await execFile(getFilePath('sync.sh'), (stdout: unknown) => {
     stopPrompt(s, 'Completed');
     return stdout;
   });
@@ -115,7 +115,7 @@ function introPrompt(msg: string) {
 
 async function runSync() {
   const s = startPrompts('Syncing', null);
-  return await execFile(getFilePath('sync.sh'), (stdout) => {
+  return await execFile(getFilePath('sync.sh'), (stdout: unknown) => {
     stopPrompt(s, 'Sync completed');
     outro('Completed');
     return stdout;
