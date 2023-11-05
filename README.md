@@ -27,9 +27,9 @@ Using TypeScript, the CLI provides an enhanced developer workflow.
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/)
-- [Visual Studio Code](https://code.visualstudio.com/)
+- [Ruby](https://www.ruby-lang.org/en/documentation/installation/)
 - [ServiceNow Extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ServiceNow.now-vscode)
-- A [project created](https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html) and [application imported](https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/vscode-import-application.html) in VS Code
+- An [imported application](https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/vscode-import-application.html) in VS Code
 
 **[Back to top](#table-of-contents)**
 
