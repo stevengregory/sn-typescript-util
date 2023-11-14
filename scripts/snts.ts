@@ -31,19 +31,19 @@ function doOptions(program: any) {
   const option: string = Object.keys(program.opts()).toString();
   const options: any = {
     build: () => {
-      doBuild();
+      hasApplication() && doBuild();
     },
     compile: () => {
-      doCompile();
+      hasApplication() && doCompile();
     },
     sync: () => {
-      doSync();
+      hasApplication() && doSync();
     },
     default: () => {
       program.help();
     }
   };
-  return ((hasApplication() && options[option]) || options['default'])();
+  return options[option] || options['default']();
 }
 
 async function doSync() {

@@ -26,19 +26,19 @@ function doOptions(program) {
   const option = Object.keys(program.opts()).toString();
   const options = {
     build: () => {
-      doBuild();
+      hasApplication() && doBuild();
     },
     compile: () => {
-      doCompile();
+      hasApplication() && doCompile();
     },
     sync: () => {
-      doSync();
+      hasApplication() && doSync();
     },
     default: () => {
       program.help();
     }
   };
-  return ((hasApplication() && options[option]) || options['default'])();
+  return options[option] || options['default']();
 }
 async function doSync() {
   const s = startPrompts('Processing', 'Sync started');
