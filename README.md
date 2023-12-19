@@ -11,6 +11,7 @@ A [TypeScript](https://www.typescriptlang.org/) CLI utility that works on-top of
 1. [Installation and Setup](#installation-and-setup)
 1. [Basic Workflow](#basic-workflow)
 1. [Commands](#commands)
+1. [Project Structure](#project-structure)
 1. [License](#license)
 
 ## Benefits
@@ -134,6 +135,52 @@ snts --version
 
 snts -V
 ```
+
+**[Back to top](#table-of-contents)**
+
+## Project Structure
+
+Inside of the application directory (after the build), the project structure will look something like this.
+
+```text
+/
+├── background scripts/
+├── scratch/
+├── src/
+│   ├── Server Development/
+│   │   └── Script Includes/
+│   │       └── DataService.script.js
+│   │       └── Utils.script.js
+│   └── Service Portal/
+│       └── Widgets/
+│           └── Dashboard/
+│               └── Dashboard.client_script.js
+│               └── Dashboard.css.scss
+│               └── Dashboard.demo_data.json
+│               └── Dashboard.link.js
+│               └── Dashboard.option_schema.json
+│               └── Dashboard.script.js
+│               └── Dashboard.template.html
+├── system/
+├── ts/
+│   ├── Server Development/
+│   │   └── Script Includes/
+│   │       └── DataService.script.ts
+│   │       └── Utils.script.ts
+│   ├── Service Portal/
+│   │   └── Widgets/
+│   │       └── Dashboard/
+│   │            └── Dashboard.client_script.ts
+│   │            └── Dashboard.link.ts
+│   │            └── Dashboard.script.ts
+│   └── Types/
+│       └── Table.ts
+│       └── User.ts
+├── .eslintrc
+└── app.config.json
+```
+
+This example project has two script includes, a widget, and a `Types` directory for interfaces & types.
 
 **[Back to top](#table-of-contents)**
 
