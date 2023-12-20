@@ -7,6 +7,7 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { bold, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
+import { Options } from './options.js';
 import { Workspace } from './workspace.js';
 
 async function doBuild() {
@@ -26,24 +27,24 @@ async function doCompile() {
   });
 }
 
-function doOptions(program: any) {
+function doOptions(program) {
   program.parse(process.argv).opts();
-  const option: string = Object.keys(program.opts()).toString();
-  const options: any = {
+  const option = Object.keys(program.opts()).toString();
+  const options = {
     build: () => {
-      hasApplication() && doBuild();
+      doBuild();
     },
     compile: () => {
-      hasApplication() && doCompile();
+      doCompile();
     },
     sync: () => {
-      hasApplication() && doSync();
+      doSync();
     },
     default: () => {
       program.help();
     }
   };
-  return options[option] || options['default']();
+  return handleOptions(program, options, option);
 }
 
 async function doSync() {
@@ -72,6 +73,13 @@ async function getPackageInfo() {
 
 function getWorkspace() {
   return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
+}
+
+function handleOptions(program: any, options: Options, option: string) {
+  return (
+    shouldShowHelp(program, option) ||
+    ((hasApplication() && options[option]) || showHelp(program))()
+  );
 }
 
 async function hasApplication() {
@@ -120,6 +128,14 @@ async function runSync() {
     outro('Completed');
     return stdout;
   });
+}
+
+function shouldShowHelp(program: any, option: string) {
+  return !option && showHelp(program);
+}
+
+function showHelp(program: any) {
+  return program.help();
 }
 
 function startPrompts(start: string, intro: string | null) {
