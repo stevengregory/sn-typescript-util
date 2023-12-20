@@ -27,10 +27,10 @@ async function doCompile() {
   });
 }
 
-function doOptions(program) {
+function doOptions(program: any) {
   program.parse(process.argv).opts();
-  const option = Object.keys(program.opts()).toString();
-  const options = {
+  const option: string = Object.keys(program.opts()).toString();
+  const options: Options = {
     build: () => {
       doBuild();
     },
