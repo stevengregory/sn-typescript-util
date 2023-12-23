@@ -30,6 +30,7 @@ async function doCompile() {
 function doOptions(program: any) {
   program.parse(process.argv).opts();
   const option: string = Object.keys(program.opts()).toString();
+  const optionKey = option as keyof Options;
   const options: Options = {
     build: () => {
       doBuild();
@@ -44,7 +45,7 @@ function doOptions(program: any) {
       program.help();
     }
   };
-  return handleOptions(program, options, option);
+  return handleOptions(program, options, optionKey);
 }
 
 async function doSync() {
@@ -75,7 +76,7 @@ function getWorkspace() {
   return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
 }
 
-function handleOptions(program: any, options: Options, option: string) {
+function handleOptions(program: any, options: Options, option: keyof Options) {
   return (
     shouldShowHelp(program, option) ||
     ((hasApplication() && options[option]) || showHelp(program))()

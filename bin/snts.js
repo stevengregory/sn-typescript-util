@@ -24,6 +24,7 @@ async function doCompile() {
 function doOptions(program) {
     program.parse(process.argv).opts();
     const option = Object.keys(program.opts()).toString();
+    const optionKey = option;
     const options = {
         build: () => {
             doBuild();
@@ -38,7 +39,7 @@ function doOptions(program) {
             program.help();
         }
     };
-    return handleOptions(program, options, option);
+    return handleOptions(program, options, optionKey);
 }
 async function doSync() {
     const s = startPrompts('Processing', 'Sync started');
