@@ -170,9 +170,9 @@ Inside of the application directory (after the build), the project structure wil
 │   ├── Service Portal/
 │   │   └── Widgets/
 │   │       └── Dashboard/
-│   │            └── Dashboard.client_script.ts
-│   │            └── Dashboard.link.ts
-│   │            └── Dashboard.script.ts
+│   │           └── Dashboard.client_script.ts
+│   │           └── Dashboard.link.ts
+│   │           └── Dashboard.script.ts
 │   └── Types/
 │       └── Table.ts
 │       └── User.ts
