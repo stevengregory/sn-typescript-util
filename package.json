@@ -35,7 +35,7 @@
     "@types/commander": "^2.12.2",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
-    "bun-types": "^1.0.18-1",
+    "bun-types": "^1.0.19",
     "eslint": "^8.56.0",
     "prettier": "^3.1.1"
   }
