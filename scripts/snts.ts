@@ -27,7 +27,7 @@ async function doCompile() {
   });
 }
 
-function doOptions(program: any) {
+function doOptions(program: Command) {
   program.parse(process.argv).opts();
   const option: string = Object.keys(program.opts()).toString();
   const optionKey = option as keyof Options;
@@ -76,7 +76,11 @@ function getWorkspace() {
   return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
 }
 
-function handleOptions(program: any, options: Options, option: keyof Options) {
+function handleOptions(
+  program: Command,
+  options: Options,
+  option: keyof Options
+) {
   return (
     shouldShowHelp(program, option) ||
     ((hasApplication() && options[option]) || showHelp(program))()
@@ -131,11 +135,11 @@ async function runSync() {
   });
 }
 
-function shouldShowHelp(program: any, option: string) {
+function shouldShowHelp(program: Command, option: string) {
   return !option && showHelp(program);
 }
 
-function showHelp(program: any) {
+function showHelp(program: Command) {
   return program.help();
 }
 
