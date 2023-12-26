@@ -106,7 +106,7 @@ async function init() {
   const program = new Command();
   const info = await getPackageInfo();
   program.description(info.description);
-  program.version(info.version);
+  program.version(info.version, '-v, --version', 'output the current version');
   program.option(
     '-b, --build',
     'build project utility files & package dependencies'
