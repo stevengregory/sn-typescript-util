@@ -64,6 +64,10 @@ async function getPackageInfo() {
 function getWorkspace() {
     return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
 }
+function handleError() {
+    getErrorMsg();
+    process.exit(1);
+}
 function handleOptions(program, options, option) {
     return (shouldShowHelp(program, option) ||
         ((hasApplication() && options[option]) || showHelp(program))());
@@ -74,9 +78,8 @@ async function hasApplication() {
         const app = workspace.ACTIVE_APPLICATION;
         return Object.entries(app).length === 0 ? getErrorMsg() : true;
     }
-    catch (e) {
-        getErrorMsg();
-        return process.exit(1);
+    catch {
+        return handleError();
     }
 }
 (async () => {
