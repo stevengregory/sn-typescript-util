@@ -133,7 +133,7 @@ snts --version
 
 # or
 
-snts -V
+snts -v
 ```
 
 **[Back to top](#table-of-contents)**
