@@ -5,7 +5,7 @@ import { execFile } from 'node:child_process';
 import path from 'path';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
-import { bold, red } from 'colorette';
+import { bold, magenta, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
 import { Options } from './options.js';
 import { Workspace } from './workspace.js';
@@ -109,7 +109,11 @@ async function hasApplication() {
 async function init() {
   const program = new Command();
   const info = await getPackageInfo();
-  program.description(info.description);
+  program.description(
+    `${bold(
+      magenta('SN TypeScript Util')
+    )} is a TS utility for ServiceNow developers using VS Code.`
+  );
   program.version(info.version, '-v, --version', 'output the current version');
   program.option(
     '-b, --build',
