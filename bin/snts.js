@@ -66,7 +66,7 @@ function getWorkspace() {
 }
 function handleError() {
   getErrorMsg();
-  process.exit(1);
+  return process.exit(1);
 }
 function handleOptions(program, options, option) {
   return (
