@@ -27,7 +27,7 @@ async function doCompile() {
   });
 }
 
-function doOptions(program: Command) {
+function doOptions(program: Command, version: string) {
   program.parse(process.argv).opts();
   const option: string = Object.keys(program.opts()).toString();
   const optionKey = option as keyof Options;
@@ -38,6 +38,9 @@ function doOptions(program: Command) {
     compile: () => {
       doCompile();
     },
+    help: () => {
+      program.help();
+    },
     sync: () => {
       doSync();
     },
@@ -45,7 +48,7 @@ function doOptions(program: Command) {
       program.help();
     }
   };
-  return handleOptions(program, options, optionKey);
+  return handleOptions(program, options, optionKey, version);
 }
 
 async function doSync() {
@@ -91,8 +94,13 @@ function handleError() {
 function handleOptions(
   program: Command,
   options: Options,
-  option: keyof Options
+  option: keyof Options,
+  version: string
 ) {
+  if (option === 'help' || !option) {
+    console.log(getDescription(version));
+    program.help();
+  }
   return (
     shouldShowHelp(program, option) ||
     ((hasApplication() && options[option]) || showHelp(program))()
@@ -130,9 +138,9 @@ async function init() {
     '-s, --sync',
     'sync new instance-based src files to the ts directory'
   );
+  program.option('-h, --help', 'display help for command');
   program.usage(cyan('[options]'));
-  console.log(getDescription(version));
-  return doOptions(program);
+  return doOptions(program, version);
 }
 
 function introPrompt(msg: string) {

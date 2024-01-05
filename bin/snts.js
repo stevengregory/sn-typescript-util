@@ -21,7 +21,7 @@ async function doCompile() {
     return stdout;
   });
 }
-function doOptions(program) {
+function doOptions(program, version) {
   program.parse(process.argv).opts();
   const option = Object.keys(program.opts()).toString();
   const optionKey = option;
@@ -32,6 +32,9 @@ function doOptions(program) {
     compile: () => {
       doCompile();
     },
+    help: () => {
+      program.help();
+    },
     sync: () => {
       doSync();
     },
@@ -39,7 +42,7 @@ function doOptions(program) {
       program.help();
     }
   };
-  return handleOptions(program, options, optionKey);
+  return handleOptions(program, options, optionKey, version);
 }
 async function doSync() {
   const s = startPrompts('Processing', 'Sync started');
@@ -74,7 +77,11 @@ function handleError() {
   getErrorMsg();
   return process.exit(1);
 }
-function handleOptions(program, options, option) {
+function handleOptions(program, options, option, version) {
+  if (option === 'help' || !option) {
+    console.log(getDescription(version));
+    program.help();
+  }
   return (
     shouldShowHelp(program, option) ||
     ((hasApplication() && options[option]) || showHelp(program))()
@@ -109,9 +116,9 @@ async function init() {
     '-s, --sync',
     'sync new instance-based src files to the ts directory'
   );
+  program.option('-h, --help', 'display help for command');
   program.usage(cyan('[options]'));
-  console.log(getDescription(version));
-  return doOptions(program);
+  return doOptions(program, version);
 }
 function introPrompt(msg) {
   return intro(msg);
