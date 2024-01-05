@@ -5,7 +5,7 @@ import { execFile } from 'node:child_process';
 import path from 'path';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
-import { bold, gray, magenta, red } from 'colorette';
+import { bold, cyan, gray, magenta, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
 import { Options } from './options.js';
 import { Workspace } from './workspace.js';
@@ -54,6 +54,13 @@ async function doSync() {
     stopPrompt(s, 'Completed');
     return stdout;
   });
+}
+
+function getDescription(version: string) {
+  const title = 'SN TypeScript Util';
+  const description =
+    'is a TS utility for ServiceNow developers using VS Code.';
+  return `${bold(magenta(title))} ${description} ${gray(`(${version})`)}\n`;
 }
 
 function getErrorMsg() {
@@ -109,15 +116,8 @@ async function hasApplication() {
 async function init() {
   const program = new Command();
   const info = await getPackageInfo();
-  const version = `(${info.version})`;
-  program.description(
-    `${bold(
-      magenta('SN TypeScript Util')
-    )} is a TS utility for ServiceNow developers using VS Code. ${gray(
-      version
-    )}`
-  );
-  program.version(info.version, '-v, --version', 'output the current version');
+  const version = info.version;
+  program.version(version, '-v, --version', 'output the current version');
   program.option(
     '-b, --build',
     'build project utility files & package dependencies'
@@ -130,6 +130,8 @@ async function init() {
     '-s, --sync',
     'sync new instance-based src files to the ts directory'
   );
+  program.usage(cyan('[options]'));
+  console.log(getDescription(version));
   return doOptions(program);
 }
 

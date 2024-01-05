@@ -4,7 +4,7 @@ import { execFile } from 'node:child_process';
 import path from 'path';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
-import { bold, gray, magenta, red } from 'colorette';
+import { bold, cyan, gray, magenta, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
 async function doBuild() {
   const s = startPrompts('Installing configs', 'Build started');
@@ -48,6 +48,12 @@ async function doSync() {
     return stdout;
   });
 }
+function getDescription(version) {
+  const title = 'SN TypeScript Util';
+  const description =
+    'is a TS utility for ServiceNow developers using VS Code.';
+  return `${bold(magenta(title))} ${description} ${gray(`(${version})`)}\n`;
+}
 function getErrorMsg() {
   const url = `https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html`;
   const msg = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
@@ -89,15 +95,8 @@ async function hasApplication() {
 async function init() {
   const program = new Command();
   const info = await getPackageInfo();
-  const version = `(${info.version})`;
-  program.description(
-    `${bold(
-      magenta('SN TypeScript Util')
-    )} is a TS utility for ServiceNow developers using VS Code. ${gray(
-      version
-    )}`
-  );
-  program.version(info.version, '-v, --version', 'output the current version');
+  const version = info.version;
+  program.version(version, '-v, --version', 'output the current version');
   program.option(
     '-b, --build',
     'build project utility files & package dependencies'
@@ -110,6 +109,8 @@ async function init() {
     '-s, --sync',
     'sync new instance-based src files to the ts directory'
   );
+  program.usage(cyan('[options]'));
+  console.log(getDescription(version));
   return doOptions(program);
 }
 function introPrompt(msg) {
