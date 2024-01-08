@@ -101,11 +101,11 @@ async function init() {
     const program = new Command();
     const info = await getPackageInfo();
     const version = info.version;
-    program.version(version, '-v, --version', 'output the current version');
     program.option('-b, --build', 'build project utility files & package dependencies');
     program.option('-c, --compile', 'compile TypeScript files to JavaScript & move to src');
-    program.option('-s, --sync', 'sync new instance-based src files to the ts directory');
     program.option('-h, --help', 'display help for command');
+    program.option('-s, --sync', 'sync new instance-based src files to the ts directory');
+    program.version(version, '-v, --version', 'output the current version');
     program.usage(cyan('[options]'));
     return doOptions(program, version);
 }
