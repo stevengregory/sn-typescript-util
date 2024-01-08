@@ -63,7 +63,7 @@ function getDescription(version: string) {
   const title = 'SN TypeScript Util';
   const description =
     'is a TS utility for ServiceNow developers using VS Code.';
-  return `${bold(magenta(title))} ${description} ${gray(`(${version})`)}\n`;
+  return `${bold(magenta(title))} ${description} ${gray(`(v${version})`)}\n`;
 }
 
 function getErrorMsg() {
