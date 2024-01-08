@@ -33,13 +33,13 @@ function doOptions(program, version) {
             doCompile();
         },
         help: () => {
-            program.help();
+            showHelp(program);
         },
         sync: () => {
             doSync();
         },
         default: () => {
-            program.help();
+            showHelp(program);
         }
     };
     return handleOptions(program, options, optionKey, version);
@@ -79,7 +79,7 @@ function handleError() {
 function handleOptions(program, options, option, version) {
     if (option === 'help' || !option) {
         console.log(getDescription(version));
-        program.help();
+        showHelp(program);
     }
     return (shouldShowHelp(program, option) ||
         ((hasApplication() && options[option]) || showHelp(program))());
