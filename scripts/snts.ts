@@ -7,8 +7,8 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, magenta, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
-import { Options } from './options.js';
-import { Workspace } from './workspace.js';
+import { Options } from './types/options.js';
+import { Workspace } from './types/workspace.js';
 
 async function doBuild() {
   const s = startPrompts('Installing configs', 'Build started');
