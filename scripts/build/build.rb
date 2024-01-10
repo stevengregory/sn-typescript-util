@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative File.join(__dir__, 'utils')
+require_relative File.join(__dir__, './../utils/util')
 
 module ServiceNow
   class Build
