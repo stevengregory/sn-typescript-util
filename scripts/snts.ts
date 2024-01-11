@@ -34,11 +34,9 @@ async function doCompile() {
 }
 
 function doOptions(program: Command, version: string) {
-  program.parse(process.argv).opts();
-  const option: string = Object.keys(program.opts()).toString();
-  const optionKey = option as keyof Options;
-  const options = getOptions(program);
-  return handleOptions(program, options, optionKey, version);
+  const options = parseOptions(program);
+  const optionKey = options as keyof Options;
+  return handleOptions(program, getOptions(program), optionKey, version);
 }
 
 async function doSync() {
@@ -158,6 +156,11 @@ async function init() {
 
 function introPrompt(msg: string) {
   return intro(msg);
+}
+
+function parseOptions(program: Command) {
+  const options = program.parse(process.argv).opts();
+  return options && Object.keys(program.opts()).toString();
 }
 
 async function runSync() {
