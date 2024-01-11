@@ -37,23 +37,7 @@ function doOptions(program: Command, version: string) {
   program.parse(process.argv).opts();
   const option: string = Object.keys(program.opts()).toString();
   const optionKey = option as keyof Options;
-  const options: Options = {
-    build: () => {
-      doBuild();
-    },
-    compile: () => {
-      doCompile();
-    },
-    help: () => {
-      showHelp(program);
-    },
-    sync: () => {
-      doSync();
-    },
-    default: () => {
-      showHelp(program);
-    }
-  };
+  const options = getOptions(program);
   return handleOptions(program, options, optionKey, version);
 }
 
@@ -85,6 +69,26 @@ function getFilePath(file: string, dir: string = 'scripts/build') {
   const fileName = fileURLToPath(import.meta.url);
   const dirName = path.dirname(fileName);
   return `${path.join(dirName, `../${dir}`)}/${file}`;
+}
+
+function getOptions(program: Command): Options {
+  return {
+    build: () => {
+      doBuild();
+    },
+    compile: () => {
+      doCompile();
+    },
+    help: () => {
+      showHelp(program);
+    },
+    sync: () => {
+      doSync();
+    },
+    default: () => {
+      showHelp(program);
+    }
+  };
 }
 
 async function getPackageInfo() {
