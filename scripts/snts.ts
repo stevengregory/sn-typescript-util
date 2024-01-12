@@ -51,8 +51,8 @@ async function doSync() {
 }
 
 function getDescription(version: string) {
-  const title = 'SN TypeScript Util';
-  const description =
+  const title: string = 'SN TypeScript Util';
+  const description: string =
     'is a TS utility for ServiceNow developers using VS Code.';
   return `${bold(magenta(title))} ${description} ${gray(`(v${version})`)}\n`;
 }
