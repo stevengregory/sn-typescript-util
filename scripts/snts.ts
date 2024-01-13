@@ -7,6 +7,7 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, magenta, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
+import { constants } from './utils/constants.js';
 import { Options } from './types/options.js';
 import { Workspace } from './types/workspace.js';
 
@@ -51,15 +52,13 @@ async function doSync() {
 }
 
 function getDescription(version: string) {
-  const title: string = 'SN TypeScript Util';
-  const description: string =
-    'is a TS utility for ServiceNow developers using VS Code.';
+  const title: string = constants.projectName;
+  const description: string = constants.projectDescription;
   return `${bold(magenta(title))} ${description} ${gray(`(v${version})`)}\n`;
 }
 
 function getErrorMsg() {
-  const url: string = `https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html`;
-  const msg: string = `No active application detected. Please create a project with the ServiceNow Extension for VS Code.\n\n${url}`;
+  const msg: string = `${constants.errorMsg}\n\n${constants.docsUrl}`;
   return console.error(bold(red(msg)));
 }
 
