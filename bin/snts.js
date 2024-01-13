@@ -6,7 +6,6 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, magenta, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
-import { constants } from './utils/constants.js';
 async function doBuild() {
   const s = startPrompts('Installing configs', 'Build started');
   return await execFile(getFilePath('init.rb', 'scripts/build'), (stdout) => {
@@ -37,12 +36,27 @@ async function doSync() {
     return stdout;
   });
 }
+function getConstants() {
+  let Constants;
+  (function (Constants) {
+    Constants['projectName'] = 'SN TypeScript Util';
+    Constants['projectDescription'] =
+      'is a TS utility for ServiceNow developers using VS Code.';
+    Constants['errorMsg'] =
+      'No active application detected. Please create a project with the ServiceNow Extension for VS Code.';
+    Constants['docsUrl'] =
+      'https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html';
+  })(Constants || (Constants = {}));
+  return Constants;
+}
 function getDescription(version) {
+  const constants = getConstants();
   const title = constants.projectName;
   const description = constants.projectDescription;
   return `${bold(magenta(title))} ${description} ${gray(`(v${version})`)}\n`;
 }
 function getErrorMsg() {
+  const constants = getConstants();
   const msg = `${constants.errorMsg}\n\n${constants.docsUrl}`;
   return console.error(bold(red(msg)));
 }
