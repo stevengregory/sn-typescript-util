@@ -122,18 +122,18 @@ async function init() {
   const version = info.version;
   program.option(
     '-b, --build',
-    'build project utility files & package dependencies'
+    'Build project utility files & package dependencies'
   );
   program.option(
     '-c, --compile',
-    'compile TypeScript files to JavaScript & move to src'
+    'Compile TypeScript files to JavaScript & move to src'
   );
-  program.option('-h, --help', 'display help for command');
+  program.option('-h, --help', 'Display help for command');
   program.option(
     '-s, --sync',
-    'sync new instance-based src files to the ts directory'
+    'Sync new instance-based src files to the ts directory'
   );
-  program.version(version, '-v, --version', 'output the current version');
+  program.version(version, '-v, --version', 'Output the current version');
   program.usage(cyan('[options]'));
   return doOptions(program, version);
 }
