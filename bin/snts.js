@@ -46,6 +46,14 @@ function getConstants() {
       'No active application detected. Please create a project with the ServiceNow Extension for VS Code.';
     Constants['docsUrl'] =
       'https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html';
+    Constants['buildOption'] =
+      'Build project utility files & package dependencies';
+    Constants['compileOption'] =
+      'Compile TypeScript files to JavaScript & move to src';
+    Constants['helpOption'] = 'Display help for command';
+    Constants['syncOption'] =
+      'Sync new instance-based src files to the ts directory';
+    Constants['versionOption'] = 'Output the current version';
   })(Constants || (Constants = {}));
   return Constants;
 }
@@ -119,21 +127,13 @@ async function hasApplication() {
 async function init() {
   const program = new Command();
   const info = await getPackageInfo();
+  const constants = getConstants();
   const version = info.version;
-  program.option(
-    '-b, --build',
-    'Build project utility files & package dependencies'
-  );
-  program.option(
-    '-c, --compile',
-    'Compile TypeScript files to JavaScript & move to src'
-  );
-  program.option('-h, --help', 'Display help for command');
-  program.option(
-    '-s, --sync',
-    'Sync new instance-based src files to the ts directory'
-  );
-  program.version(version, '-v, --version', 'Output the current version');
+  program.option('-b, --build', constants.buildOption);
+  program.option('-c, --compile', constants.compileOption);
+  program.option('-h, --help', constants.helpOption);
+  program.option('-s, --sync', constants.syncOption);
+  program.version(version, '-v, --version', constants.versionOption);
   program.usage(cyan('[options]'));
   return doOptions(program, version);
 }
