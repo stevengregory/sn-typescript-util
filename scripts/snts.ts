@@ -33,10 +33,10 @@ async function doCompile() {
   );
 }
 
-function doOptions(program: Command, version: string) {
+function doOptions(program: Command) {
   const options = parseOptions(program);
   const optionKey = options as keyof Options;
-  return handleOptions(program, getOptions(program), optionKey, version);
+  return handleOptions(program, getOptions(program), optionKey);
 }
 
 async function doSync() {
@@ -108,6 +108,11 @@ async function getPackageInfo() {
   return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
 
+async function getVersion() {
+  const info = await getPackageInfo();
+  return info.version;
+}
+
 function getWorkspace() {
   return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
 }
@@ -117,13 +122,13 @@ function handleError() {
   return process.exit(1);
 }
 
-function handleOptions(
+async function handleOptions(
   program: Command,
   options: Options,
-  option: keyof Options,
-  version: string
+  option: keyof Options
 ) {
   if (option === 'help' || !option) {
+    const version = await getVersion();
     console.log(getDescription(version));
     showHelp(program);
   }
@@ -149,16 +154,15 @@ async function hasApplication() {
 
 async function init() {
   const program = new Command();
-  const info = await getPackageInfo();
   const constants = getConstants();
-  const version = info.version;
+  const version = await getVersion();
   program.option('-b, --build', constants.buildOption);
   program.option('-c, --compile', constants.compileOption);
   program.option('-h, --help', constants.helpOption);
   program.option('-s, --sync', constants.syncOption);
   program.version(version, '-v, --version', constants.versionOption);
   program.usage(cyan('[options]'));
-  return doOptions(program, version);
+  return doOptions(program);
 }
 
 function introPrompt(msg: string) {
