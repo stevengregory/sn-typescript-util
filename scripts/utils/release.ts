@@ -3,18 +3,19 @@ import path from 'path';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { cancel, confirm, intro, outro, select, spinner } from '@clack/prompts';
+import { Version } from './../types/version.js';
 
 async function bumpVersion(releaseType) {
   return await $`npm version ${releaseType} --no-git-tag-version`;
 }
 
-async function confirmVersion(version) {
+async function confirmVersion(version: string) {
   return await confirm({
     message: `Bump to ${version}?`
   });
 }
 
-async function doGitOperation(version) {
+async function doGitOperation(version: string) {
   const msg = 'chore: bump the version';
   await $`git commit -a -m ${msg}`;
   await $`git tag ${version}`;
@@ -22,7 +23,7 @@ async function doGitOperation(version) {
   await $`git push origin ${version}`;
 }
 
-async function doOperation(shouldContinue, version) {
+async function doOperation(shouldContinue, version: string) {
   if (shouldContinue) {
     const s = spinner();
     s.start('Start release');
@@ -40,7 +41,7 @@ async function doPublish() {
   return await $`npm publish`;
 }
 
-function getFilePath(file, dir) {
+function getFilePath(file: string, dir: string) {
   const fileName = fileURLToPath(import.meta.url);
   const dirName = path.dirname(fileName);
   return `${path.join(dirName, `./../../${dir}`)}/${file}`;
@@ -53,12 +54,16 @@ async function getPackageInfo() {
 async function getReleaseTypes() {
   return select({
     message: 'Please pick a release type.',
-    options: [
-      { value: 'patch', label: 'Patch' },
-      { value: 'minor', label: 'Minor' },
-      { value: 'major', label: 'Major' }
-    ]
+    options: getOptions()
   });
+}
+
+function getOptions(): Version[] {
+  return [
+    { value: 'patch', label: 'Patch' },
+    { value: 'minor', label: 'Minor' },
+    { value: 'major', label: 'Major' }
+  ];
 }
 
 async function getVersion() {
