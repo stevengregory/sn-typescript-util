@@ -18,9 +18,9 @@ async function confirmVersion(version: string) {
 async function doGitOperation(version: string) {
   const msg = 'chore: bump the version';
   await $`git commit -a -m ${msg}`;
-  await $`git tag ${version}`;
+  await $`git tag v${version}`;
   await $`git push`;
-  await $`git push origin ${version}`;
+  await $`git push origin v${version}`;
 }
 
 async function doOperation(shouldContinue, version: string) {
