@@ -9,6 +9,11 @@ async function bumpVersion(releaseType) {
   return await $`npm version ${releaseType} --no-git-tag-version`;
 }
 
+async function cancelOperation() {
+  cancel('Operation cancelled.');
+  await $`git checkout package.json`;
+}
+
 async function confirmVersion(version: string) {
   return await confirm({
     message: `Bump to ${version}?`
@@ -32,8 +37,7 @@ async function doOperation(shouldContinue, version: string) {
     s.stop('Done.');
     outro("You're all set!");
   } else {
-    cancel('Operation cancelled.');
-    await $`git checkout package.json`;
+    cancelOperation();
   }
 }
 
