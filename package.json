@@ -19,7 +19,7 @@
   "scripts": {
     "format": "prettier --write ./bin/*.js ./scripts/*.ts",
     "lint": "eslint .",
-    "release": "./scripts/utils/release.sh",
+    "release": "bun ./scripts/utils/release.js",
     "watch": "tsc --watch"
   },
   "type": "module",
