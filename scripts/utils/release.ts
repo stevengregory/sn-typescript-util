@@ -32,7 +32,7 @@ async function doOperation(shouldContinue, version) {
     outro("You're all set!");
   } else {
     cancel('Operation cancelled.');
-    await $`git checkout .`;
+    await $`git checkout package.json`;
   }
 }
 
