@@ -54,14 +54,10 @@ In the application directory created by the ServiceNow Extension for VS Code, th
 
 ## Basic Workflow
 
-After installation & setup, simply run the `watch` script to start looking for TypeScript code changes in the `ts` directory.
+After installation & setup, simply run the TypeScript compiler `--watch` command to start looking for TypeScript code changes in the `ts` directory.
 
 ```bash
-npm run watch
-
-# or
-
-yarn watch
+tsc --watch
 ```
 
 Any JavaScript ES2015 (ES6) code added will get converted down to ES5 and moved to the `src` directory. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
