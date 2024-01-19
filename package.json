@@ -28,7 +28,6 @@
     "@types/servicenow": "^10.0.4",
     "colorette": "^2.0.20",
     "commander": "^11.1.0",
-    "npm-add-script": "^1.1.0",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
