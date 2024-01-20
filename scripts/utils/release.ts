@@ -28,7 +28,7 @@ async function doGitOperation(version: string) {
   await $`git push origin ${version}`;
 }
 
-async function doOperation(shouldContinue, version: string) {
+async function doOperation(shouldContinue: boolean | symbol, version: string) {
   if (shouldContinue) {
     const s = spinner();
     s.start('Start release');
