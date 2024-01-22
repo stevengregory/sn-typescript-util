@@ -52,9 +52,5 @@ module ServiceNow
         create_prettier_config
       end
     end
-
-    def transpile
-      %x( tsc )
-    end
   end
 end

@@ -32,13 +32,8 @@ async function doClean() {
 
 async function doCompile() {
   const s = startPrompts('Processing', 'Compile started');
-  return await execFile(
-    getFilePath('compile.rb', 'scripts/build'),
-    (stdout: unknown) => {
-      stopPrompt(s, 'Completed');
-      return stdout;
-    }
-  );
+  const compile = await transpile();
+  return compile && stopPrompt(s, 'Completed');
 }
 
 function doOptions(program: Command) {
@@ -221,4 +216,8 @@ function startPrompts(start: string, intro: string | null) {
 
 function stopPrompt(spinner: any, msg: string) {
   return spinner.stop(msg);
+}
+
+async function transpile() {
+  return await $`tsc`;
 }
