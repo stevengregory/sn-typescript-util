@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { $ } from 'execa';
 import { Command } from 'commander';
 import { execFile } from 'node:child_process';
 import path from 'path';
@@ -13,6 +14,12 @@ async function doBuild() {
     runSync();
     return stdout;
   });
+}
+async function doClean() {
+  const project = await getProject();
+  const dirName = path.dirname(project);
+  const buildDir = `${path.join(dirName, project)}/ts`;
+  return await $`rm -rf ${buildDir}`;
 }
 async function doCompile() {
   const s = startPrompts('Processing', 'Compile started');
@@ -51,6 +58,7 @@ function getConstants() {
     Constants['compileOption'] =
       'Compile TypeScript files to JavaScript & move to src';
     Constants['helpOption'] = 'Display help for command';
+    Constants['removeOption'] = 'Remove & clean the build directory';
     Constants['syncOption'] =
       'Sync new instance-based src files to the ts directory';
     Constants['versionOption'] = 'Output the current version';
@@ -84,6 +92,9 @@ function getOptions(program) {
     help: () => {
       showHelp(program);
     },
+    remove: () => {
+      doClean();
+    },
     sync: () => {
       doSync();
     },
@@ -94,6 +105,10 @@ function getOptions(program) {
 }
 async function getPackageInfo() {
   return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
+}
+async function getProject() {
+  const workspace = await getWorkspace();
+  return workspace.ACTIVE_APPLICATION;
 }
 async function getVersion() {
   const info = await getPackageInfo();
@@ -136,6 +151,7 @@ async function init() {
   program.option('-b, --build', constants.buildOption);
   program.option('-c, --compile', constants.compileOption);
   program.option('-h, --help', constants.helpOption);
+  program.option('-r, --remove', constants.removeOption);
   program.option('-s, --sync', constants.syncOption);
   program.version(version, '-v, --version', constants.versionOption);
   program.usage(cyan('[options]'));
