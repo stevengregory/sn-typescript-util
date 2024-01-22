@@ -108,6 +108,18 @@ snts --help
 snts -h
 ```
 
+### Remove
+
+Remove & clean the `ts` build directory.
+
+```bash
+snts --remove
+
+# or
+
+snts -r
+```
+
 ### Sync
 
 Sync new instance-based `src` files to the `ts` directory.
