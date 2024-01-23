@@ -4,23 +4,26 @@ import { $ } from 'execa';
 import { Command } from 'commander';
 import { execFile } from 'node:child_process';
 import path from 'path';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, magenta, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
 import { Options } from './types/options.js';
 import { Workspace } from './types/workspace.js';
 
+async function createTemplate(file: string, path: string): Promise<void> {
+  const project = await getProject();
+  const template = readFileSync(path, 'utf8');
+  const updatedContent = template.replace(/@project/g, project);
+  return await writeFile(file, updatedContent);
+}
+
 async function doBuild() {
   const s = startPrompts('Installing configs', 'Build started');
-  return await execFile(
-    getFilePath('init.rb', 'scripts/build'),
-    (stdout: unknown) => {
-      stopPrompt(s, 'Configs installed');
-      runSync();
-      return stdout;
-    }
-  );
+  const filePath = getFilePath('tsconfig.json', 'scripts/templates');
+  await createTemplate('zod.json', filePath);
+  stopPrompt(s, 'Configs installed');
+  runSync();
 }
 
 async function doClean() {
@@ -220,4 +223,12 @@ function stopPrompt(spinner: any, msg: string) {
 
 async function transpile() {
   return await $`tsc`;
+}
+
+async function writeFile(file: string, data: string) {
+  try {
+    return writeFileSync(file, data, { encoding: 'utf-8' });
+  } catch (error) {
+    console.error(`Error writing file: ${error}`);
+  }
 }

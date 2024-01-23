@@ -3,17 +3,22 @@ import { $ } from 'execa';
 import { Command } from 'commander';
 import { execFile } from 'node:child_process';
 import path from 'path';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, magenta, red } from 'colorette';
 import { intro, outro, spinner } from '@clack/prompts';
+async function createTemplate(file, path) {
+  const project = await getProject();
+  const template = readFileSync(path, 'utf8');
+  const updatedContent = template.replace(/@project/g, project);
+  return await writeFile(file, updatedContent);
+}
 async function doBuild() {
   const s = startPrompts('Installing configs', 'Build started');
-  return await execFile(getFilePath('init.rb', 'scripts/build'), (stdout) => {
-    stopPrompt(s, 'Configs installed');
-    runSync();
-    return stdout;
-  });
+  const filePath = getFilePath('tsconfig.json', 'scripts/templates');
+  await createTemplate('zod.json', filePath);
+  stopPrompt(s, 'Configs installed');
+  runSync();
 }
 async function doClean() {
   const project = await getProject();
@@ -184,4 +189,11 @@ function stopPrompt(spinner, msg) {
 }
 async function transpile() {
   return await $`tsc`;
+}
+async function writeFile(file, data) {
+  try {
+    return writeFileSync(file, data, { encoding: 'utf-8' });
+  } catch (error) {
+    console.error(`Error writing file: ${error}`);
+  }
 }
