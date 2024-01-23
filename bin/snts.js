@@ -53,7 +53,7 @@ function getConstants() {
     Constants['compileOption'] =
       'Compile TypeScript files to JavaScript & move to src';
     Constants['helpOption'] = 'Display help for command';
-    Constants['removeOption'] = 'Remove & clean the build directory';
+    Constants['removeOption'] = 'Remove & clean the ts build directory';
     Constants['syncOption'] =
       'Sync new instance-based src files to the ts directory';
     Constants['versionOption'] = 'Output the current version';
