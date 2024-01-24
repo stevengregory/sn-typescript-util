@@ -16,7 +16,7 @@ async function createTemplate(file, path) {
 async function doBuild() {
   const s = startPrompts('Installing configs', 'Build started');
   const filePath = getFilePath('tsconfig.json', 'scripts/templates');
-  await createTemplate('zod.json', filePath);
+  await createTemplate('tsconfig.json', filePath);
   stopPrompt(s, 'Configs installed');
   runSync();
 }
