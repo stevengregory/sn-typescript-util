@@ -18,7 +18,7 @@
   },
   "scripts": {
     "format": "prettier --write ./bin/*.js ./scripts/*.ts",
-    "lint": "eslint .",
+    "lint": "bun eslint .",
     "release": "bun ./scripts/utils/release.ts",
     "watch": "tsc --watch"
   },
