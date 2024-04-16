@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "@version",
     "outDir": "@project/src",
     "baseUrl": ".",
     "skipLibCheck": true

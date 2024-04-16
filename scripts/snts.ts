@@ -4,25 +4,77 @@ import { $ } from 'execa';
 import { Command } from 'commander';
 import { execFile } from 'node:child_process';
 import path from 'path';
-import { readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
-import { bold, cyan, gray, magenta, red } from 'colorette';
-import { intro, outro, spinner } from '@clack/prompts';
+import { bold, cyan, gray, green, magenta, red } from 'colorette';
+import { confirm, intro, outro, select, spinner } from '@clack/prompts';
 import { Options } from './types/options.js';
 import { Workspace } from './types/workspace.js';
+
+async function addFile(
+  sourcefile: string,
+  sourceDir: string,
+  targetFile: string,
+  targetDir: string | any,
+  message: string
+) {
+  if (await confirmFile(message)) {
+    const file = await getTargetPath(targetFile, targetDir);
+    const filePath = getFilePath(sourcefile, sourceDir);
+    createFile(file, filePath);
+  }
+}
+
+async function addInterfaceFile() {
+  return await addFile(
+    'base-table.ts',
+    'scripts/templates',
+    'BaseTable.ts',
+    'ts/Types',
+    `${getConstants().confirmInterfaceMsg}`
+  );
+}
+
+async function addPrettierFile() {
+  return await addFile(
+    '.prettierrc.json',
+    'scripts/templates',
+    '.prettierrc.json',
+    null,
+    `${getConstants().confirmPrettierMsg}`
+  );
+}
+
+async function confirmFile(msg: string) {
+  return await confirm({
+    message: `${msg}`
+  });
+}
+
+async function createFile(file: string, path: string): Promise<void> {
+  const template = readFileSync(path, 'utf8');
+  return await writeFile(file, template);
+}
 
 async function createTemplate(file: string, path: string): Promise<void> {
   const project = await getProject();
   const template = readFileSync(path, 'utf8');
-  const updatedContent = template.replace(/@project/g, project);
-  return await writeFile(file, updatedContent);
+  const data = template.replace(/@project/g, project);
+  return await writeFile(file, data);
 }
 
 async function doBuild() {
-  const s = startPrompts('Installing configs', 'Build started');
+  introPrompt(`${bold(magenta(getConstants().projectName))}: Build`);
+  const esVersion: any = await getConfigTypes();
+  await addInterfaceFile();
+  await addPrettierFile();
+  const s = startPrompts('Installing config(s)', null);
   const filePath = getFilePath('tsconfig.json', 'scripts/templates');
   await createTemplate('tsconfig.json', filePath);
-  stopPrompt(s, 'Configs installed');
+  const template = readFileSync('tsconfig.json', 'utf8');
+  const data = template.replace(/@version/g, esVersion);
+  await writeFile('tsconfig.json', data);
+  stopPrompt(s, `The ${cyan('tsconfig.json')} file was bootstrapped.`);
   runSync();
 }
 
@@ -56,10 +108,27 @@ async function doSync() {
   );
 }
 
+function getConfigTargets() {
+  return [
+    { value: 'es5', label: 'ES5', hint: 'recommended' },
+    { value: 'es6', label: 'ES2015', hint: 'ES6' },
+    { value: 'es2021', label: 'ES2021' }
+  ];
+}
+
+async function getConfigTypes() {
+  return select({
+    message: 'Please pick a ECMAScript target.',
+    options: getConfigTargets()
+  });
+}
+
 function getConstants() {
   enum Constants {
     projectName = 'SN TypeScript Util',
     projectDescription = 'is a TS utility for ServiceNow developers using VS Code.',
+    confirmInterfaceMsg = `Add a ${cyan('BaseTable.ts')} interface with global default fields?`,
+    confirmPrettierMsg = `Add a ${cyan('.prettierrc.json')} default config?`,
     errorMsg = 'No active application detected. Please create a project with the ServiceNow Extension for VS Code.',
     docsUrl = 'https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html',
     buildOption = 'Build project utility files & package dependencies',
@@ -85,7 +154,7 @@ function getErrorMsg() {
   return console.error(bold(red(msg)));
 }
 
-function getFilePath(file: string, dir: string = 'scripts/build') {
+function getFilePath(file: string, dir: string) {
   const fileName = fileURLToPath(import.meta.url);
   const dirName = path.dirname(fileName);
   return `${path.join(dirName, `../${dir}`)}/${file}`;
@@ -121,6 +190,13 @@ async function getPackageInfo() {
 async function getProject() {
   const workspace = await getWorkspace();
   return workspace.ACTIVE_APPLICATION;
+}
+
+async function getTargetPath(file: string, dir: string) {
+  const project = await getProject();
+  const path = dir ? `${project}/${dir}/` : '.';
+  dir && !existsSync(path) && mkdirSync(path, { recursive: true });
+  return `${path}/${file}`;
 }
 
 async function getVersion() {
@@ -191,12 +267,16 @@ function parseOptions(program: Command) {
 }
 
 async function runSync() {
+  const project = await getProject();
   const s = startPrompts('Syncing', null);
   return await execFile(
     getFilePath('sync.sh', 'scripts/build'),
     (stdout: unknown) => {
-      stopPrompt(s, 'Sync completed');
-      outro('Completed');
+      stopPrompt(
+        s,
+        `TypeScript files constructed in the ${cyan(project + '/ts')} directory.`
+      );
+      outro(`${green('Done!')}`);
       return stdout;
     }
   );
