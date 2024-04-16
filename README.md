@@ -181,7 +181,7 @@ Inside of the application directory (after the build), the project structure wil
 │   │           └── Dashboard.link.ts
 │   │           └── Dashboard.script.ts
 │   └── Types/
-│       └── Table.ts
+│       └── BaseTable.ts
 │       └── User.ts
 ├── .eslintrc
 └── app.config.json
