@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "esModuleInterop": true,
     "module": "NodeNext",
     "noImplicitAny": true,
-    "esModuleInterop": true,
     "outDir": "bin",
     "resolveJsonModule": true,
     "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
     "types": ["bun-types"]
   },
   "include": ["scripts"]
