@@ -130,7 +130,7 @@ function getConstants() {
     confirmInterfaceMsg = `Add a ${cyan('BaseTable.ts')} interface with global default fields?`,
     confirmPrettierMsg = `Add a ${cyan('.prettierrc.json')} default config?`,
     errorMsg = 'No active application detected. Please create a project with the ServiceNow Extension for VS Code.',
-    docsUrl = 'https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html',
+    docsUrl = 'https://docs.servicenow.com/bundle/washingtondc-application-development/page/build/applications/task/create-project.html',
     buildOption = 'Build project utility files & package dependencies',
     compileOption = 'Compile TypeScript files to JavaScript & move to src',
     helpOption = 'Display help for command',

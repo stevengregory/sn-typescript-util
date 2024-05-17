@@ -114,7 +114,7 @@ function getConstants() {
     Constants['errorMsg'] =
       'No active application detected. Please create a project with the ServiceNow Extension for VS Code.';
     Constants['docsUrl'] =
-      'https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/create-project.html';
+      'https://docs.servicenow.com/bundle/washingtondc-application-development/page/build/applications/task/create-project.html';
     Constants['buildOption'] =
       'Build project utility files & package dependencies';
     Constants['compileOption'] =
