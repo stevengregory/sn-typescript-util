@@ -29,7 +29,7 @@ Using TypeScript, the CLI provides an enhanced developer workflow.
 
 - [Node.js](https://nodejs.org/)
 - [ServiceNow Extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ServiceNow.now-vscode)
-- An [imported application](https://docs.servicenow.com/bundle/vancouver-application-development/page/build/applications/task/vscode-import-application.html) in VS Code
+- An [imported application](https://docs.servicenow.com/bundle/washingtondc-application-development/page/build/applications/task/vscode-import-application.html) in VS Code
 
 **[Back to top](#table-of-contents)**
 
@@ -59,7 +59,7 @@ After installation & setup, simply run the TypeScript compiler `--watch` command
 tsc --watch
 ```
 
-Any JavaScript ES2015 (ES6) code added will get converted down to ES5 and moved to the `src` directory. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
+The TypeScript will get transpiled to ES5 (or other ECMAScript target) and moved to the `src` directory. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
 
 **[Back to top](#table-of-contents)**
 
