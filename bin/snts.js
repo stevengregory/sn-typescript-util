@@ -52,6 +52,7 @@ async function doBuild() {
   const esVersion = await getConfigTypes();
   await addInterfaceFile();
   await addPrettierFile();
+  await initGitRepo();
   const s = startPrompts('Installing config(s)', null);
   const filePath = getFilePath('tsconfig.json', 'scripts/templates');
   await createTemplate('tsconfig.json', filePath);
@@ -224,6 +225,10 @@ async function init() {
   program.version(version, '-v, --version', constants.versionOption);
   program.usage(cyan('[options]'));
   return doOptions(program);
+}
+async function initGitRepo() {
+  const msg = `Initialize a new git repository?`;
+  return (await confirmFile(msg)) && (await $`git init`);
 }
 function introPrompt(msg) {
   return intro(msg);
