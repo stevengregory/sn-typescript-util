@@ -44,7 +44,7 @@ npm install -g sn-typescript-util
 Build the TypeScript and configuration files. This only needs to be done once for an application.
 
 ```bash
-snts --build
+snts -b
 ```
 
 In the application directory created by the ServiceNow Extension for VS Code, the build creates a `ts` directory from the JavaScript files in the `src` directory. This is where all the TypeScript code resides and where the workflow begins.
@@ -59,7 +59,7 @@ After installation & setup, simply run the TypeScript compiler `--watch` command
 tsc --watch
 ```
 
-The TypeScript will get transpiled to ES5 (or other ECMAScript target) and moved to the `src` directory. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
+The TypeScript will get transpiled and moved to the `src` directory. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
 
 **[Back to top](#table-of-contents)**
 
