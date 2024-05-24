@@ -20,7 +20,7 @@ async function addInterfaceFile() {
     'scripts/templates',
     'BaseTable.ts',
     'ts/Types',
-    `${getConstants().confirmInterfaceMsg}`
+    `Add a ${cyan('BaseTable.ts')} interface with global default fields?`
   );
 }
 async function addPrettierFile() {
@@ -29,7 +29,7 @@ async function addPrettierFile() {
     'scripts/templates',
     '.prettierrc.json',
     null,
-    `${getConstants().confirmPrettierMsg}`
+    `Add a ${cyan('.prettierrc.json')} default config?`
   );
 }
 async function confirmFile(msg) {
@@ -104,14 +104,6 @@ function getConstants() {
     Constants['projectName'] = 'SN TypeScript Util';
     Constants['projectDescription'] =
       'is a TS utility for ServiceNow developers using VS Code.';
-    Constants[
-      (Constants['confirmInterfaceMsg'] =
-        `Add a ${cyan('BaseTable.ts')} interface with global default fields?`)
-    ] = 'confirmInterfaceMsg';
-    Constants[
-      (Constants['confirmPrettierMsg'] =
-        `Add a ${cyan('.prettierrc.json')} default config?`)
-    ] = 'confirmPrettierMsg';
     Constants['errorMsg'] =
       'No active application detected. Please create a project with the ServiceNow Extension for VS Code.';
     Constants['docsUrl'] =

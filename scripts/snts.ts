@@ -31,7 +31,7 @@ async function addInterfaceFile() {
     'scripts/templates',
     'BaseTable.ts',
     'ts/Types',
-    `${getConstants().confirmInterfaceMsg}`
+    `Add a ${cyan('BaseTable.ts')} interface with global default fields?`
   );
 }
 
@@ -41,7 +41,7 @@ async function addPrettierFile() {
     'scripts/templates',
     '.prettierrc.json',
     null,
-    `${getConstants().confirmPrettierMsg}`
+    `Add a ${cyan('.prettierrc.json')} default config?`
   );
 }
 
@@ -128,8 +128,6 @@ function getConstants() {
   enum Constants {
     projectName = 'SN TypeScript Util',
     projectDescription = 'is a TS utility for ServiceNow developers using VS Code.',
-    confirmInterfaceMsg = `Add a ${cyan('BaseTable.ts')} interface with global default fields?`,
-    confirmPrettierMsg = `Add a ${cyan('.prettierrc.json')} default config?`,
     errorMsg = 'No active application detected. Please create a project with the ServiceNow Extension for VS Code.',
     docsUrl = 'https://docs.servicenow.com/bundle/washingtondc-application-development/page/build/applications/task/create-project.html',
     buildOption = 'Build project utility files & package dependencies',
