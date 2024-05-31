@@ -140,7 +140,7 @@ function getConstants() {
   return Constants;
 }
 
-function getDescription(version: string) {
+function getDescription(version: string): string {
   const constants = getConstants();
   const title: string = constants.projectName;
   const description: string = constants.projectDescription;
@@ -153,7 +153,7 @@ function getErrorMsg() {
   return console.error(bold(red(msg)));
 }
 
-function getFilePath(file: string, dir: string) {
+function getFilePath(file: string, dir: string): string {
   const fileName = fileURLToPath(import.meta.url);
   const dirName = path.dirname(fileName);
   return `${path.join(dirName, `../${dir}`)}/${file}`;
@@ -265,7 +265,7 @@ function introPrompt(msg: string) {
   return intro(msg);
 }
 
-function parseOptions(program: Command) {
+function parseOptions(program: Command): string {
   const options = program.parse(process.argv).opts();
   return options && Object.keys(program.opts()).toString();
 }
