@@ -29,7 +29,7 @@ Using TypeScript, the CLI provides an enhanced developer workflow.
 
 - [Node.js](https://nodejs.org/)
 - [ServiceNow Extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ServiceNow.now-vscode)
-- An [imported application](https://docs.servicenow.com/bundle/washingtondc-application-development/page/build/applications/task/vscode-import-application.html) in VS Code
+- An [imported application](https://www.servicenow.com/docs/bundle/xanadu-application-development/page/build/applications/task/vscode-import-application.html) in VS Code
 
 **[Back to top](#table-of-contents)**
 
