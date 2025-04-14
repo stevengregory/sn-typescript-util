@@ -3,15 +3,16 @@ import path from 'path';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { cancel, confirm, intro, outro, select, spinner } from '@clack/prompts';
-import { Version } from './../types/version.js';
+import { Version, VersionType } from './../types/version.js';
 
-async function bumpVersion(releaseType) {
+async function bumpVersion(releaseType: VersionType) {
   return await $`npm version ${releaseType} --no-git-tag-version`;
 }
 
 async function cancelOperation() {
   cancel('Operation cancelled.');
   await $`git checkout package.json`;
+  process.exit(1);
 }
 
 async function confirmVersion(version: string) {
@@ -55,11 +56,15 @@ async function getPackageInfo() {
   return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
 
-async function getReleaseTypes() {
-  return select({
+async function getReleaseTypes(): Promise<VersionType> {
+  const result = await select({
     message: 'Please pick a release type.',
     options: getOptions()
   });
+  if (typeof result === 'symbol') {
+    await cancelOperation();
+  }
+  return result as VersionType;
 }
 
 function getOptions(): Version[] {

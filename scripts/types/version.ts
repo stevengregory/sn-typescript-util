@@ -1,4 +1,4 @@
-type VersionType = 'patch' | 'minor' | 'major';
+export type VersionType = 'patch' | 'minor' | 'major';
 
 export interface Version {
   value: VersionType;
