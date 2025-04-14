@@ -12,7 +12,7 @@ async function bumpVersion(releaseType: VersionType) {
 async function cancelOperation() {
   cancel('Operation cancelled.');
   await $`git checkout package.json`;
-  process.exit(1);
+  process.exit(0);
 }
 
 async function confirmVersion(version: string) {
@@ -30,7 +30,7 @@ async function doGitOperation(version: string) {
 }
 
 async function doOperation(shouldContinue: boolean | symbol, version: string) {
-  if (shouldContinue) {
+  if (shouldContinue && isNotSymbol(shouldContinue)) {
     const s = spinner();
     s.start('Start release');
     await doGitOperation(version);
@@ -56,12 +56,11 @@ async function getPackageInfo() {
   return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
 
-async function getReleaseTypes(): Promise<VersionType> {
-  const result = await select({
+async function getReleaseTypes() {
+  return select({
     message: 'Please pick a release type.',
     options: getOptions()
   });
-  return result as VersionType;
 }
 
 function getOptions(): Version[] {
@@ -77,11 +76,20 @@ async function getVersion() {
   return `v${file.version}`;
 }
 
+function isNotSymbol(value: unknown): value is boolean {
+  return typeof value !== 'symbol';
+}
+
+function isVersionType(value: unknown): value is VersionType {
+  return value === 'patch' || value === 'minor' || value === 'major';
+}
+
 (async function init() {
   intro('Release Utils');
   const releaseType = await getReleaseTypes();
-  if (typeof releaseType === 'symbol') {
-    await cancelOperation();
+  if (!isVersionType(releaseType)) {
+    cancelOperation();
+    return;
   }
   const version = (await bumpVersion(releaseType)) && (await getVersion());
   const shouldContinue = await confirmVersion(version);
