@@ -61,9 +61,6 @@ async function getReleaseTypes(): Promise<VersionType> {
     message: 'Please pick a release type.',
     options: getOptions()
   });
-  if (typeof result === 'symbol') {
-    await cancelOperation();
-  }
   return result as VersionType;
 }
 
@@ -83,6 +80,9 @@ async function getVersion() {
 (async function init() {
   intro('Release Utils');
   const releaseType = await getReleaseTypes();
+  if (typeof releaseType === 'symbol') {
+    await cancelOperation();
+  }
   const version = (await bumpVersion(releaseType)) && (await getVersion());
   const shouldContinue = await confirmVersion(version);
   return await doOperation(shouldContinue, version);
