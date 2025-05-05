@@ -1,5 +1,7 @@
+export type target = 'ES5' | 'ES6' | 'ES2015' | 'ES2021';
+
 export interface ConfigTarget {
-  value: string;
-  label: string;
+  value: Lowercase<target>;
+  label: target;
   hint?: string;
 }
