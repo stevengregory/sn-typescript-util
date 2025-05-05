@@ -4,6 +4,7 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { cancel, confirm, intro, outro, select, spinner } from '@clack/prompts';
 import { Version, VersionType } from './../types/version.js';
+import { Metadata } from './../types/metadata.js';
 
 async function bumpVersion(releaseType: VersionType) {
   return await $`npm version ${releaseType} --no-git-tag-version`;
@@ -46,17 +47,17 @@ async function doPublish() {
   return await $`npm publish`;
 }
 
-function getFilePath(file: string, dir: string) {
+function getFilePath(file: string, dir: string): string {
   const fileName = fileURLToPath(import.meta.url);
   const dirName = path.dirname(fileName);
   return `${path.join(dirName, `./../../${dir}`)}/${file}`;
 }
 
-async function getPackageInfo() {
+async function getPackageInfo(): Promise<Metadata & { version: string }> {
   return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
 
-async function getReleaseTypes() {
+async function getReleaseTypes(): Promise<symbol | VersionType> {
   return select({
     message: 'Please pick a release type.',
     options: getOptions()
