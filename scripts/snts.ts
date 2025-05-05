@@ -10,6 +10,7 @@ import { bold, cyan, gray, green, magenta, red } from 'colorette';
 import { confirm, intro, outro, select, spinner } from '@clack/prompts';
 import { Options } from './types/options.js';
 import { Workspace } from './types/workspace.js';
+import { ConfigTarget } from './types/config.js';
 
 async function addFile(
   sourcefile: string,
@@ -109,7 +110,7 @@ async function doSync() {
   );
 }
 
-function getConfigTargets() {
+function getConfigTargets(): ConfigTarget[] {
   return [
     { value: 'es5', label: 'ES5', hint: 'recommended' },
     { value: 'es6', label: 'ES2015', hint: 'ES6' },
@@ -117,7 +118,7 @@ function getConfigTargets() {
   ];
 }
 
-async function getConfigTypes() {
+async function getConfigTypes(): Promise<symbol | string> {
   return select({
     message: 'Please pick a ECMAScript target.',
     options: getConfigTargets()
@@ -186,7 +187,7 @@ async function getPackageInfo() {
   return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
 
-async function getProject() {
+async function getProject(): Promise<string> {
   const workspace = await getWorkspace();
   return workspace.ACTIVE_APPLICATION;
 }
