@@ -195,7 +195,9 @@ async function getProject(): Promise<string> {
 async function getTargetPath(file: string, dir: string) {
   const project = await getProject();
   const path = dir ? `${project}/${dir}/` : '.';
-  dir && !existsSync(path) && mkdirSync(path, { recursive: true });
+  if (dir && !existsSync(path)) {
+    mkdirSync(path, { recursive: true });
+  }
   return `${path}/${file}`;
 }
 
@@ -296,7 +298,9 @@ function showHelp(program: Command) {
 }
 
 function startPrompts(start: string, intro: string | null) {
-  intro && introPrompt(intro);
+  if (intro) {
+    introPrompt(intro);
+  }
   const s = spinner();
   s.start(start);
   return s;

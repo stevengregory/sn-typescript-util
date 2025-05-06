@@ -168,7 +168,9 @@ async function getProject() {
 async function getTargetPath(file, dir) {
   const project = await getProject();
   const path = dir ? `${project}/${dir}/` : '.';
-  dir && !existsSync(path) && mkdirSync(path, { recursive: true });
+  if (dir && !existsSync(path)) {
+    mkdirSync(path, { recursive: true });
+  }
   return `${path}/${file}`;
 }
 async function getVersion() {
@@ -248,7 +250,9 @@ function showHelp(program) {
   return program.help();
 }
 function startPrompts(start, intro) {
-  intro && introPrompt(intro);
+  if (intro) {
+    introPrompt(intro);
+  }
   const s = spinner();
   s.start(start);
   return s;
