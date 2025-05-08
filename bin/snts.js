@@ -17,7 +17,7 @@ async function addFile(sourcefile, sourceDir, targetFile, targetDir, message) {
 async function addInterfaceFile() {
   return await addFile(
     'base-table.ts',
-    'scripts/templates',
+    'src/templates',
     'BaseTable.ts',
     'ts/Types',
     `Add a ${cyan('BaseTable.ts')} interface with global default fields?`
@@ -26,7 +26,7 @@ async function addInterfaceFile() {
 async function addPrettierFile() {
   return await addFile(
     '.prettierrc.json',
-    'scripts/templates',
+    'src/templates',
     '.prettierrc.json',
     null,
     `Add a ${cyan('.prettierrc.json')} default config?`
@@ -54,7 +54,7 @@ async function doBuild() {
   await addPrettierFile();
   await initGitRepo();
   const s = startPrompts('Installing config(s)', null);
-  const filePath = getFilePath('tsconfig.json', 'scripts/templates');
+  const filePath = getFilePath('tsconfig.json', 'src/templates');
   await createTemplate('tsconfig.json', filePath);
   const template = readFileSync('tsconfig.json', 'utf8');
   const data = template.replace(/@version/g, esVersion);
