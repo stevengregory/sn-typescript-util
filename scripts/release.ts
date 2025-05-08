@@ -3,8 +3,8 @@ import path from 'path';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { cancel, confirm, intro, outro, select, spinner } from '@clack/prompts';
-import { Version, VersionType } from './../types/version.js';
-import { Metadata } from './../types/metadata.js';
+import { Version, VersionType } from '../src/types/version.js';
+import { Metadata } from '../src/types/metadata.js';
 
 async function bumpVersion(releaseType: VersionType) {
   return await $`npm version ${releaseType} --no-git-tag-version`;
