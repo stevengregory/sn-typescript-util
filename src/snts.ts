@@ -16,7 +16,7 @@ async function addFile(
   sourcefile: string,
   sourceDir: string,
   targetFile: string,
-  targetDir: string | any,
+  targetDir: string | null,
   message: string
 ) {
   if (await confirmFile(message)) {
@@ -66,7 +66,7 @@ async function createTemplate(file: string, path: string): Promise<void> {
 
 async function doBuild() {
   introPrompt(`${bold(magenta(getConstants().projectName))}: Build`);
-  const esVersion: any = await getConfigTypes();
+  const esVersion = await getConfigTypes();
   await addInterfaceFile();
   await addPrettierFile();
   await initGitRepo();
@@ -74,7 +74,7 @@ async function doBuild() {
   const filePath = getFilePath('tsconfig.json', 'scripts/templates');
   await createTemplate('tsconfig.json', filePath);
   const template = readFileSync('tsconfig.json', 'utf8');
-  const data = template.replace(/@version/g, esVersion);
+  const data = template.replace(/@version/g, esVersion as string);
   await writeFile('tsconfig.json', data);
   stopPrompt(s, `The ${cyan('tsconfig.json')} file was bootstrapped.`);
   runSync();
@@ -192,7 +192,7 @@ async function getProject(): Promise<string> {
   return workspace.ACTIVE_APPLICATION;
 }
 
-async function getTargetPath(file: string, dir: string) {
+async function getTargetPath(file: string, dir: string | null) {
   const project = await getProject();
   const path = dir ? `${project}/${dir}/` : '.';
   if (dir && !existsSync(path)) {
@@ -306,7 +306,7 @@ function startPrompts(start: string, intro: string | null) {
   return s;
 }
 
-function stopPrompt(spinner: any, msg: string) {
+function stopPrompt(spinner: { stop: (msg: string) => void }, msg: string) {
   return spinner.stop(msg);
 }
 

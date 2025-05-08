@@ -80,7 +80,7 @@ function doOptions(program) {
 }
 async function doSync() {
   const s = startPrompts('Processing', 'Sync started');
-  return await execFile(getFilePath('sync.sh', 'scripts/build'), (stdout) => {
+  return await execFile(getFilePath('sync.sh', 'scripts'), (stdout) => {
     stopPrompt(s, 'Completed');
     return stdout;
   });
@@ -234,7 +234,7 @@ function parseOptions(program) {
 async function runSync() {
   const project = await getProject();
   const s = startPrompts('Syncing', null);
-  return await execFile(getFilePath('sync.sh', 'scripts/build'), (stdout) => {
+  return await execFile(getFilePath('sync.sh', 'scripts'), (stdout) => {
     stopPrompt(
       s,
       `TypeScript files constructed in the ${cyan(project + '/ts')} directory.`
