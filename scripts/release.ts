@@ -50,7 +50,8 @@ async function doPublish() {
 function getFilePath(file: string, dir: string): string {
   const fileName = fileURLToPath(import.meta.url);
   const dirName = path.dirname(fileName);
-  return `${path.join(dirName, `./../../${dir}`)}/${file}`;
+  const projectRoot = path.join(dirName, '..');
+  return path.join(projectRoot, dir, file);
 }
 
 async function getPackageInfo(): Promise<Metadata & { version: string }> {
