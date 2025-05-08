@@ -130,7 +130,7 @@ function getConstants() {
     projectName = 'SN TypeScript Util',
     projectDescription = 'is a TS utility for ServiceNow developers using VS Code.',
     errorMsg = 'No active application detected. Please create a project with the ServiceNow Extension for VS Code.',
-    docsUrl = 'https://docs.servicenow.com/bundle/washingtondc-application-development/page/build/applications/task/create-project.html',
+    docsUrl = 'https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/create-project.html',
     buildOption = 'Build project utility files & package dependencies',
     compileOption = 'Compile TypeScript files to JavaScript & move to src',
     helpOption = 'Display help for command',
