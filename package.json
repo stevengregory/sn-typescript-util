@@ -27,7 +27,7 @@
     "@clack/prompts": "^0.10.1",
     "colorette": "^2.0.20",
     "commander": "^13.1.0",
-    "execa": "^9.5.2",
+    "execa": "^9.5.3",
     "typescript": "^5.8.3"
   },
   "devDependencies": {
