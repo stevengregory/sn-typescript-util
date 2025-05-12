@@ -8,9 +8,9 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, green, magenta, red } from 'colorette';
 import { confirm, intro, outro, select, spinner } from '@clack/prompts';
-import { Options } from './types/options.js';
-import { Workspace } from './types/workspace.js';
-import { ConfigTarget } from './types/config.js';
+import type { Options } from './types/options.js';
+import type { Workspace } from './types/workspace.js';
+import type { ConfigTarget } from './types/config.js';
 
 async function addFile(
   sourcefile: string,

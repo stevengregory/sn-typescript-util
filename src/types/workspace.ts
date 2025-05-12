@@ -1,4 +1,4 @@
-import { Metadata } from './metadata.js';
+import type { Metadata } from './metadata.js';
 
 export interface Workspace {
   readonly ALL_APPLICATIONS: {
