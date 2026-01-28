@@ -7,10 +7,19 @@ import path from 'path';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, green, magenta, red } from 'colorette';
-import { confirm, intro, outro, select, spinner } from '@clack/prompts';
+import { cancel, confirm, intro, outro, select, spinner } from '@clack/prompts';
 import type { Options } from './types/options.js';
 import type { Workspace } from './types/workspace.js';
 import type { ConfigTarget } from './types/config.js';
+
+function cancelOperation() {
+  cancel('Operation cancelled.');
+  process.exit(0);
+}
+
+function isSymbol(value: unknown): value is symbol {
+  return typeof value === 'symbol';
+}
 
 async function addFile(
   sourcefile: string,
@@ -47,9 +56,13 @@ async function addPrettierFile() {
 }
 
 async function confirmFile(msg: string) {
-  return await confirm({
+  const result = await confirm({
     message: `${msg}`
   });
+  if (isSymbol(result)) {
+    cancelOperation();
+  }
+  return result;
 }
 
 async function createFile(file: string, path: string): Promise<void> {
@@ -118,11 +131,15 @@ function getConfigTargets(): ConfigTarget[] {
   ];
 }
 
-async function getConfigTypes(): Promise<symbol | string> {
-  return select({
+async function getConfigTypes(): Promise<string> {
+  const result = await select({
     message: 'Please pick a ECMAScript target.',
     options: getConfigTargets()
   });
+  if (isSymbol(result)) {
+    cancelOperation();
+  }
+  return result as string;
 }
 
 function getConstants() {
