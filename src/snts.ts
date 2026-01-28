@@ -328,7 +328,8 @@ function stopPrompt(spinner: { stop: (msg: string) => void }, msg: string) {
 }
 
 async function transpile() {
-  return await $`tsc`;
+  const tscPath = getFilePath('tsc', 'node_modules/.bin');
+  return await $`${tscPath}`;
 }
 
 async function writeFile(file: string, data: string) {
