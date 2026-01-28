@@ -29,9 +29,9 @@ async function addFile(
   message: string
 ) {
   if (await confirmFile(message)) {
-    const file = await getTargetPath(targetFile, targetDir);
+    const file = getTargetPath(targetFile, targetDir);
     const filePath = getFilePath(sourcefile, sourceDir);
-    createFile(file, filePath);
+    await createFile(file, filePath);
   }
 }
 
@@ -71,7 +71,7 @@ async function createFile(file: string, path: string): Promise<void> {
 }
 
 async function createTemplate(file: string, path: string): Promise<void> {
-  const project = await getProject();
+  const project = getProject();
   const template = readFileSync(path, 'utf8');
   const data = template.replace(/@project/g, project);
   return await writeFile(file, data);
@@ -90,11 +90,11 @@ async function doBuild() {
   const data = template.replace(/@version/g, esVersion as string);
   await writeFile('tsconfig.json', data);
   stopPrompt(s, `The ${cyan('tsconfig.json')} file was bootstrapped.`);
-  runSync();
+  await runSync();
 }
 
 async function doClean() {
-  const project = await getProject();
+  const project = getProject();
   const dirName = path.dirname(project);
   const buildDir = `${path.join(dirName, project)}/ts`;
   return await $`rm -rf ${buildDir}`;
@@ -200,17 +200,17 @@ function getOptions(program: Command): Options {
   };
 }
 
-async function getPackageInfo() {
+function getPackageInfo() {
   return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
 
-async function getProject(): Promise<string> {
-  const workspace = await getWorkspace();
+function getProject(): string {
+  const workspace = getWorkspace();
   return workspace.ACTIVE_APPLICATION;
 }
 
-async function getTargetPath(file: string, dir: string | null) {
-  const project = await getProject();
+function getTargetPath(file: string, dir: string | null) {
+  const project = getProject();
   const path = dir ? `${project}/${dir}/` : '.';
   if (dir && !existsSync(path)) {
     mkdirSync(path, { recursive: true });
@@ -218,8 +218,8 @@ async function getTargetPath(file: string, dir: string | null) {
   return `${path}/${file}`;
 }
 
-async function getVersion() {
-  const info = await getPackageInfo();
+function getVersion() {
+  const info = getPackageInfo();
   return info.version;
 }
 
@@ -238,7 +238,7 @@ async function handleOptions(
   option: keyof Options
 ) {
   if (option === 'help' || !option) {
-    const version = await getVersion();
+    const version = getVersion();
     console.log(getDescription(version));
     showHelp(program);
   }
@@ -248,9 +248,9 @@ async function handleOptions(
   );
 }
 
-async function hasApplication() {
+function hasApplication() {
   try {
-    const workspace: Workspace = await getWorkspace();
+    const workspace: Workspace = getWorkspace();
     const app: string = workspace.ACTIVE_APPLICATION;
     return Object.entries(app).length === 0 ? getErrorMsg() : true;
   } catch {
@@ -265,7 +265,7 @@ async function hasApplication() {
 async function init() {
   const program = new Command();
   const constants = getConstants();
-  const version = await getVersion();
+  const version = getVersion();
   program.option('-b, --build', constants.buildOption);
   program.option('-c, --compile', constants.compileOption);
   program.option('-h, --help', constants.helpOption);
@@ -291,7 +291,7 @@ function parseOptions(program: Command): string {
 }
 
 async function runSync() {
-  const project = await getProject();
+  const project = getProject();
   const s = startPrompts('Syncing', null);
   return await execFile(
     getFilePath('sync.sh', 'scripts'),
