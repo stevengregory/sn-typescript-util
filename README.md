@@ -41,7 +41,7 @@ Install the npm package.
 npm install -g sn-typescript-util
 ```
 
-Build the TypeScript and configuration files. This only needs to be done once for an application.
+Build the TypeScript and configuration files. This only needs to be done once for an application. You'll be prompted to select an ECMAScript target and configure optional files.
 
 ```bash
 snts -b
@@ -59,7 +59,7 @@ After installation & setup, simply run the TypeScript compiler `--watch` command
 tsc --watch
 ```
 
-The TypeScript will get transpiled and moved to the `src` directory. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
+The TypeScript will get transpiled and moved to the `src` directory. Alternatively, use `snts -c` for a one-time compile. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
 
 **[Back to top](#table-of-contents)**
 
@@ -75,6 +75,12 @@ snts [command]
 
 Build project utility files and package dependencies. Creates a `ts` directory from the JavaScript files in the `src` directory.
 
+Prompts:
+- ECMAScript target (ES5, ES2015, ES2021)
+- Add a `BaseTable.ts` interface with global default fields
+- Add a `.prettierrc.json` config
+- Initialize a git repository
+
 ```bash
 snts --build
 
@@ -85,7 +91,7 @@ snts -b
 
 ### Compile
 
-Compile TypeScript files in the `ts` directory to JavaScript ES5 and moves them to the `src` directory.
+Compile TypeScript files in the `ts` directory to JavaScript and moves them to the `src` directory.
 
 ```bash
 snts --compile
