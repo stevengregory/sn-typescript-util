@@ -250,9 +250,8 @@ async function handleOptions(
 
 function hasApplication() {
   try {
-    const workspace: Workspace = getWorkspace();
-    const app: string = workspace.ACTIVE_APPLICATION;
-    return Object.entries(app).length === 0 ? getErrorMsg() : true;
+    const app = getWorkspace().ACTIVE_APPLICATION;
+    return app?.length > 0 || getErrorMsg();
   } catch {
     return handleError();
   }
