@@ -125,7 +125,7 @@ async function doSync() {
 
 function getConfigTargets(): ConfigTarget[] {
   return [
-    { value: 'es5', label: 'ES5', hint: 'recommended' },
+    { value: 'es5', label: 'ES5' },
     { value: 'es6', label: 'ES2015', hint: 'ES6' },
     { value: 'es2021', label: 'ES2021' }
   ];
