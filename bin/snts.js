@@ -86,7 +86,7 @@ async function doSync() {
 }
 function getConfigTargets() {
     return [
-        { value: 'es5', label: 'ES5', hint: 'recommended' },
+        { value: 'es5', label: 'ES5' },
         { value: 'es6', label: 'ES2015', hint: 'ES6' },
         { value: 'es2021', label: 'ES2021' }
     ];
@@ -192,9 +192,8 @@ async function handleOptions(program, options, option) {
 }
 function hasApplication() {
     try {
-        const workspace = getWorkspace();
-        const app = workspace.ACTIVE_APPLICATION;
-        return Object.entries(app).length === 0 ? getErrorMsg() : true;
+        const app = getWorkspace().ACTIVE_APPLICATION;
+        return app?.length > 0 || getErrorMsg();
     }
     catch {
         return handleError();
