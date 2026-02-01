@@ -223,7 +223,7 @@ function getVersion() {
   return info.version;
 }
 
-function getWorkspace() {
+function getWorkspace(): Workspace {
   return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
 }
 
