@@ -16,8 +16,8 @@ async function cancelOperation() {
   process.exit(0);
 }
 
-async function confirmVersion(version: string) {
-  return await confirm({
+function confirmVersion(version: string) {
+  return confirm({
     message: `Bump to ${version}?`
   });
 }
@@ -54,11 +54,11 @@ function getFilePath(file: string, dir: string): string {
   return path.join(projectRoot, dir, file);
 }
 
-async function getPackageInfo(): Promise<Metadata & { version: string }> {
+function getPackageInfo(): Metadata & { version: string } {
   return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
 }
 
-async function getReleaseTypes(): Promise<symbol | VersionType> {
+function getReleaseTypes(): Promise<symbol | VersionType> {
   return select({
     message: 'Please pick a release type.',
     options: getOptions()
@@ -73,8 +73,8 @@ function getOptions(): Version[] {
   ];
 }
 
-async function getVersion() {
-  const file = await getPackageInfo();
+function getVersion() {
+  const file = getPackageInfo();
   return `v${file.version}`;
 }
 
@@ -93,7 +93,7 @@ function isVersionType(value: unknown): value is VersionType {
     cancelOperation();
     return;
   }
-  const version = (await bumpVersion(releaseType)) && (await getVersion());
+  const version = (await bumpVersion(releaseType)) && getVersion();
   const shouldContinue = await confirmVersion(version);
   return await doOperation(shouldContinue, version);
 })();
