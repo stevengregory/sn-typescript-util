@@ -74,8 +74,7 @@ function getOptions(): Version[] {
 }
 
 function getVersion() {
-  const file = getPackageInfo();
-  return `v${file.version}`;
+  return `v${getPackageInfo().version}`;
 }
 
 function isNotSymbol(value: unknown): value is boolean {
