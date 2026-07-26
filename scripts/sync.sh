@@ -19,7 +19,7 @@ sync() {
   if [ -d "$types_dir" ]; then
     sources=("$types_dir" "${sources[@]}")
   fi
-  rsync --ignore-existing --delete-after -raz --progress --prune-empty-dirs --include "*/" --include "*.js" --exclude="*" "${sources[@]}" "$ts_path"
+  rsync --ignore-existing -raz --progress --prune-empty-dirs --include "*/" --include "*.js" --exclude="*" "${sources[@]}" "$ts_path"
   find "$ts_path" -name "*.js" -exec sh -c 'mv "$0" "${0%.js}.ts"' {} \;
 }
 
