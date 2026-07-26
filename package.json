@@ -16,10 +16,18 @@
     "type": "git",
     "url": "git+https://github.com/stevengregory/sn-typescript-util.git"
   },
+  "files": [
+    "bin",
+    "scripts",
+    "src"
+  ],
   "scripts": {
-    "format": "prettier --write ./bin/*.js ./src/*.ts",
+    "format": "prettier --write ./bin/*.js ./src/*.ts ./scripts/*.ts",
     "lint": "bun eslint .",
+    "prepublishOnly": "bun run typecheck",
     "release": "bun ./scripts/release.ts",
+    "release:status": "bun ./scripts/release.ts --status",
+    "typecheck": "tsc --noEmit",
     "watch": "tsc --watch"
   },
   "type": "module",
