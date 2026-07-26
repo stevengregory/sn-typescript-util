@@ -20,7 +20,9 @@ sync() {
     sources=("$types_dir" "${sources[@]}")
   fi
   rsync --ignore-existing -raz --progress --prune-empty-dirs --include "*/" --include "*.js" --exclude="*" "${sources[@]}" "$ts_path"
+  rsync_status=$?
   find "$ts_path" -name "*.js" -exec sh -c 'mv "$0" "${0%.js}.ts"' {} \;
+  return "$rsync_status"
 }
 
 sync
