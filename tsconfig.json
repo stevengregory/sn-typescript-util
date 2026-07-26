@@ -12,5 +12,5 @@
     "declaration": false,
     "noEmit": false
   },
-  "include": ["src/snts.ts", "scripts/release.ts"]
+  "include": ["src/snts.ts"]
 }

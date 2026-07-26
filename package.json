@@ -27,7 +27,7 @@
     "prepublishOnly": "bun run typecheck",
     "release": "bun ./scripts/release.ts",
     "release:status": "bun ./scripts/release.ts --status",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p scripts",
     "watch": "tsc --watch"
   },
   "type": "module",
