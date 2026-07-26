@@ -1,37 +1,23 @@
 # SN TypeScript Util
 
 [![npm version](https://img.shields.io/npm/v/sn-typescript-util)](https://www.npmjs.com/package/sn-typescript-util)
+[![node](https://img.shields.io/node/v/sn-typescript-util)](https://nodejs.org/)
+[![license](https://img.shields.io/npm/l/sn-typescript-util)](LICENSE)
 
-A [TypeScript](https://www.typescriptlang.org/) CLI utility that works on-top of the ServiceNow Extension for VS Code. This tool activates a TypeScript-based workflow for ServiceNow developers using VS Code.
-
-## Table of Contents
-
-1. [Benefits](#benefits)
-1. [Prerequisites](#prerequisites)
-1. [Installation and Setup](#installation-and-setup)
-1. [Basic Workflow](#basic-workflow)
-1. [Commands](#commands)
-1. [Project Structure](#project-structure)
-1. [License](#license)
+A [TypeScript](https://www.typescriptlang.org/) CLI utility that works on top of the ServiceNow Extension for VS Code, activating a TypeScript-based workflow for ServiceNow developers.
 
 ## Benefits
-
-Using TypeScript, the CLI provides an enhanced developer workflow.
 
 - Work in modern JavaScript ES2015 (ES6) and beyond
 - Extend JavaScript by using types
 - Unlock code navigation and intelligent code completion
 - Catch bugs before syncing to the instance
 
-**[Back to top](#table-of-contents)**
-
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/)
+- [Node.js](https://nodejs.org/) 22.12 or later
 - [ServiceNow Extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ServiceNow.now-vscode)
 - An [imported application](https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/vscode-import-application.html) in VS Code
-
-**[Back to top](#table-of-contents)**
 
 ## Installation and Setup
 
@@ -41,119 +27,42 @@ Install the npm package.
 npm install -g sn-typescript-util
 ```
 
-Build the TypeScript and configuration files. This only needs to be done once for an application. You'll be prompted to select an ECMAScript target and configure optional files.
+Build the TypeScript and configuration files. This only needs to be done once per application.
 
 ```bash
 snts -b
 ```
 
-In the application directory created by the ServiceNow Extension for VS Code, the build creates a `ts` directory from the JavaScript files in the `src` directory. This is where all the TypeScript code resides and where the workflow begins.
+The build prompts you to select an ECMAScript target (ES5, ES2015, ES2021) and to configure optional extras: a `BaseTable.ts` interface with global default fields, a `.prettierrc.json` config, and git repository initialization.
 
-**[Back to top](#table-of-contents)**
+In the application directory created by the ServiceNow Extension for VS Code, the build creates a `ts` directory from the JavaScript files in the `src` directory. This is where all the TypeScript code resides and where the workflow begins.
 
 ## Basic Workflow
 
-After installation & setup, simply run the TypeScript compiler `--watch` command to start looking for TypeScript code changes in the `ts` directory.
+After setup, run the TypeScript compiler in watch mode to pick up changes in the `ts` directory.
 
 ```bash
 tsc --watch
 ```
 
-The TypeScript will get transpiled and moved to the `src` directory. Alternatively, use `snts -c` for a one-time compile. Then changes are ready to sync with the target instance using the ServiceNow Extension for VS Code.
-
-**[Back to top](#table-of-contents)**
+The TypeScript is transpiled and moved to the `src` directory — or use `snts -c` for a one-time compile. Changes are then ready to sync to the target instance with the ServiceNow Extension for VS Code.
 
 ## Commands
 
-Installing the CLI globally provides access to the `snts` command.
+Installing the CLI globally provides the `snts` command.
 
-```sh-session
-snts [command]
-```
-
-### Build
-
-Build project utility files and package dependencies. Creates a `ts` directory from the JavaScript files in the `src` directory.
-
-Prompts:
-- ECMAScript target (ES5, ES2015, ES2021)
-- Add a `BaseTable.ts` interface with global default fields
-- Add a `.prettierrc.json` config
-- Initialize a git repository
-
-```bash
-snts --build
-
-# or
-
-snts -b
-```
-
-### Compile
-
-Compile TypeScript files in the `ts` directory to JavaScript and moves them to the `src` directory.
-
-```bash
-snts --compile
-
-# or
-
-snts -c
-```
-
-### Help
-
-Display help for the command.
-
-```bash
-snts --help
-
-# or
-
-snts -h
-```
-
-### Remove
-
-Remove & clean the `ts` build directory.
-
-```bash
-snts --remove
-
-# or
-
-snts -r
-```
-
-### Sync
-
-Sync new instance-based `src` files to the `ts` directory.
-
-```bash
-snts --sync
-
-# or
-
-snts -s
-```
-
-### Version
-
-Output the version number.
-
-```bash
-snts --version
-
-# or
-
-snts -v
-```
-
-**[Back to top](#table-of-contents)**
+| Command     | Alias | Description                                                        |
+| ----------- | ----- | ------------------------------------------------------------------ |
+| `--build`   | `-b`  | Build project utility files and create `ts` from the `src` sources |
+| `--compile` | `-c`  | Compile TypeScript in `ts` to JavaScript and move it to `src`      |
+| `--help`    | `-h`  | Display help for the command                                       |
+| `--remove`  | `-r`  | Remove and clean the `ts` build directory                          |
+| `--sync`    | `-s`  | Sync new instance-based `src` files to the `ts` directory          |
+| `--version` | `-v`  | Output the version number                                          |
 
 ## Project Structure
 
-Inside of the application directory (after the build), the project structure will look something like this.
+After the build, the application directory will look something like this.
 
 ```text
 /
@@ -193,12 +102,8 @@ Inside of the application directory (after the build), the project structure wil
 └── app.config.json
 ```
 
-This example project has two script includes, a widget, and a `Types` directory for interfaces & types.
-
-**[Back to top](#table-of-contents)**
+This example project has two script includes, a widget, and a `Types` directory for interfaces and types.
 
 ## License
 
 [MIT License](LICENSE)
-
-**[Back to top](#table-of-contents)**
