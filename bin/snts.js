@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { $ } from 'execa';
 import { Command } from 'commander';
-import { execFile } from 'node:child_process';
 import path from 'path';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { rm } from 'node:fs/promises';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, green, magenta, red } from 'colorette';
 import { cancel, confirm, intro, outro, select, spinner } from '@clack/prompts';
@@ -62,27 +62,42 @@ async function doBuild() {
     await runSync();
 }
 async function doClean() {
-    const project = getProject();
-    const dirName = path.dirname(project);
-    const buildDir = `${path.join(dirName, project)}/ts`;
-    return await $ `rm -rf ${buildDir}`;
+    const buildDir = path.join(getProject(), 'ts');
+    await rm(buildDir, { recursive: true, force: true });
+    console.log(`Removed the ${cyan(buildDir)} directory.`);
 }
 async function doCompile() {
     const s = startPrompts('Processing', 'Compile started');
-    const compile = await transpile();
-    return compile && stopPrompt(s, 'Completed');
+    try {
+        await transpile();
+        stopPrompt(s, 'Completed');
+    }
+    catch (error) {
+        stopPrompt(s, 'Compile failed');
+        printError(error);
+        process.exit(1);
+    }
 }
 function doOptions(program) {
     const options = parseOptions(program);
-    const optionKey = options;
+    if (options.length > 1) {
+        console.error(bold(red('Options cannot be combined. Please pass one option at a time.')));
+        return process.exit(1);
+    }
+    const optionKey = options[0];
     return handleOptions(program, getOptions(program), optionKey);
 }
 async function doSync() {
     const s = startPrompts('Processing', 'Sync started');
-    return await execFile(getFilePath('sync.sh', 'scripts'), (stdout) => {
+    try {
+        await runSyncScript();
         stopPrompt(s, 'Completed');
-        return stdout;
-    });
+    }
+    catch (error) {
+        stopPrompt(s, 'Sync failed');
+        printError(error);
+        process.exit(1);
+    }
 }
 function getConfigTargets() {
     return [
@@ -135,24 +150,12 @@ function getFilePath(file, dir) {
 }
 function getOptions(program) {
     return {
-        build: () => {
-            doBuild();
-        },
-        compile: () => {
-            doCompile();
-        },
-        help: () => {
-            showHelp(program);
-        },
-        remove: () => {
-            doClean();
-        },
-        sync: () => {
-            doSync();
-        },
-        default: () => {
-            showHelp(program);
-        }
+        build: () => doBuild(),
+        compile: () => doCompile(),
+        help: () => showHelp(program),
+        remove: () => doClean(),
+        sync: () => doSync(),
+        default: () => showHelp(program)
     };
 }
 function getPackageInfo() {
@@ -177,31 +180,36 @@ function getVersion() {
 function getWorkspace() {
     return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
 }
-function handleError() {
-    getErrorMsg();
-    return process.exit(1);
-}
 async function handleOptions(program, options, option) {
-    if (option === 'help' || !option) {
+    if (!option || option === 'help') {
         const version = getVersion();
         console.log(getDescription(version));
-        showHelp(program);
+        return showHelp(program);
     }
-    return (shouldShowHelp(program, option) ||
-        ((hasApplication() && options[option]) || showHelp(program))());
+    if (!hasApplication()) {
+        return process.exit(1);
+    }
+    return await options[option]();
 }
 function hasApplication() {
     try {
-        const app = getWorkspace().ACTIVE_APPLICATION;
-        return app?.length > 0 || getErrorMsg();
+        if (getWorkspace().ACTIVE_APPLICATION.length > 0) {
+            return true;
+        }
+        getErrorMsg();
     }
     catch {
-        return handleError();
+        getErrorMsg();
     }
+    return false;
 }
-(async () => {
-    return init();
-})();
+try {
+    await init();
+}
+catch (error) {
+    printError(error);
+    process.exit(1);
+}
 async function init() {
     const program = new Command();
     const constants = getConstants();
@@ -223,20 +231,29 @@ function introPrompt(msg) {
     return intro(msg);
 }
 function parseOptions(program) {
-    const options = program.parse(process.argv).opts();
-    return options && Object.keys(program.opts()).toString();
+    return Object.keys(program.parse(process.argv).opts());
+}
+function printError(error) {
+    const { stdout, stderr, message } = (error ?? {});
+    const output = [stdout, stderr].filter(Boolean).join('\n');
+    console.error(output || bold(red(message ?? String(error))));
 }
 async function runSync() {
     const project = getProject();
     const s = startPrompts('Syncing', null);
-    return await execFile(getFilePath('sync.sh', 'scripts'), (stdout) => {
+    try {
+        await runSyncScript();
         stopPrompt(s, `TypeScript files constructed in the ${cyan(project + '/ts')} directory.`);
         outro(`${green('Done!')}`);
-        return stdout;
-    });
+    }
+    catch (error) {
+        stopPrompt(s, 'Sync failed');
+        printError(error);
+        process.exit(1);
+    }
 }
-function shouldShowHelp(program, option) {
-    return !option && showHelp(program);
+async function runSyncScript() {
+    return await $ `${getFilePath('sync.sh', 'scripts')}`;
 }
 function showHelp(program) {
     return program.help();
@@ -256,11 +273,6 @@ async function transpile() {
     const tscPath = getFilePath('tsc', 'node_modules/.bin');
     return await $ `${tscPath}`;
 }
-async function writeFile(file, data) {
-    try {
-        return writeFileSync(file, data, { encoding: 'utf-8' });
-    }
-    catch (error) {
-        console.error(`Error writing file: ${error}`);
-    }
+function writeFile(file, data) {
+    return writeFileSync(file, data, { encoding: 'utf-8' });
 }

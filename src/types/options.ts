@@ -1,8 +1,8 @@
 export interface Options {
-  build: () => void;
-  compile: () => void;
+  build: () => Promise<void>;
+  compile: () => Promise<void>;
   help: () => void;
-  remove: () => void;
-  sync: () => void;
+  remove: () => Promise<void>;
+  sync: () => Promise<void>;
   default: () => void;
 }
