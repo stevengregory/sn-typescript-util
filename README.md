@@ -104,6 +104,26 @@ After the build, the application directory will look something like this.
 
 This example project has two script includes, a widget, and a `Types` directory for interfaces and types.
 
+## Releasing
+
+Maintainers release from a clean `master` branch with authenticated GitHub and npm CLIs:
+
+```bash
+bun run release
+```
+
+The command follows the protected-branch workflow automatically:
+
+1. If the current package version is already tagged and published, select the next version. The command creates a `release/vX.Y.Z` branch and opens a version-bump pull request.
+2. Review and merge that pull request.
+3. Run `bun run release` again from `master`. The command pulls the merged version, validates the package, pushes its tag, and publishes it to npm.
+
+An interrupted publish is resumable by running the same command again. Use `bun run release:status` to inspect the current tag and registry state, or preview a release without changing anything:
+
+```bash
+bun run release --type patch --yes --dry-run
+```
+
 ## License
 
 [MIT License](LICENSE)

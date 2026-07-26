@@ -12,6 +12,5 @@
     "declaration": false,
     "noEmit": false
   },
-  "include": ["src/snts.ts"],
-  "exclude": ["scripts"]
+  "include": ["src/snts.ts"]
 }

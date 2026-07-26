@@ -1,6 +1,6 @@
 {
   "name": "sn-typescript-util",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A TypeScript utility for ServiceNow developers using VS Code",
   "bin": {
     "snts": "bin/snts.js"
@@ -16,10 +16,18 @@
     "type": "git",
     "url": "git+https://github.com/stevengregory/sn-typescript-util.git"
   },
+  "files": [
+    "bin",
+    "scripts",
+    "src"
+  ],
   "scripts": {
-    "format": "prettier --write ./bin/*.js ./src/*.ts",
+    "format": "prettier --write ./bin/*.js ./src/*.ts ./scripts/*.ts",
     "lint": "bun eslint .",
+    "prepublishOnly": "bun run typecheck",
     "release": "bun ./scripts/release.ts",
+    "release:status": "bun ./scripts/release.ts --status",
+    "typecheck": "tsc --noEmit && tsc -p scripts",
     "watch": "tsc --watch"
   },
   "type": "module",
