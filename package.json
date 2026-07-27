@@ -25,6 +25,7 @@
     "format": "prettier --write ./bin/*.js ./src/*.ts ./scripts/*.ts",
     "lint": "bun eslint .",
     "prepublishOnly": "bun run typecheck",
+    "formula:update": "bun ./scripts/update-homebrew-formula.ts",
     "release": "bun ./scripts/release.ts",
     "release:status": "bun ./scripts/release.ts --status",
     "typecheck": "tsc --noEmit && tsc -p scripts",
