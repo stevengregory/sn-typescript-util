@@ -15,7 +15,7 @@ async function addFile(sourcefile, sourceDir, targetFile, targetDir, message) {
     if (await confirmFile(message)) {
         const file = getTargetPath(targetFile, targetDir);
         const filePath = getFilePath(sourcefile, sourceDir);
-        await createFile(file, filePath);
+        createFile(file, filePath);
     }
 }
 async function addInterfaceFile() {
@@ -26,35 +26,35 @@ async function addPrettierFile() {
 }
 async function confirmFile(msg) {
     const result = await confirm({
-        message: `${msg}`
+        message: msg
     });
     if (isCancel(result)) {
         cancelOperation();
     }
     return result;
 }
-async function createFile(file, path) {
-    const template = readFileSync(path, 'utf8');
-    return await writeFile(file, template);
+function createFile(file, templatePath) {
+    const template = readFileSync(templatePath, 'utf8');
+    writeFile(file, template);
 }
-async function createTemplate(file, path) {
+function createTemplate(file, templatePath) {
     const project = getProject();
-    const template = readFileSync(path, 'utf8');
+    const template = readFileSync(templatePath, 'utf8');
     const data = template.replace(/@project/g, project);
-    return await writeFile(file, data);
+    writeFile(file, data);
 }
 async function doBuild() {
-    introPrompt(`${bold(magenta(getConstants().projectName))}: Build`);
+    intro(`${bold(magenta(getConstants().projectName))}: Build`);
     const esVersion = await getConfigTypes();
     await addInterfaceFile();
     await addPrettierFile();
     await initGitRepo();
     const s = startPrompts('Installing config(s)', null);
     const filePath = getFilePath('tsconfig.json', 'src/templates');
-    await createTemplate('tsconfig.json', filePath);
+    createTemplate('tsconfig.json', filePath);
     const template = readFileSync('tsconfig.json', 'utf8');
     const data = template.replace(/@version/g, esVersion);
-    await writeFile('tsconfig.json', data);
+    writeFile('tsconfig.json', data);
     stopPrompt(s, `The ${cyan('tsconfig.json')} file was bootstrapped.`);
     await runSync();
 }
@@ -143,7 +143,7 @@ function getErrorMsg() {
 function getFilePath(file, dir) {
     const fileName = fileURLToPath(import.meta.url);
     const dirName = path.dirname(fileName);
-    return `${path.join(dirName, `../${dir}`)}/${file}`;
+    return path.join(dirName, '..', dir, file);
 }
 function getOptions(program) {
     return {
@@ -156,7 +156,7 @@ function getOptions(program) {
     };
 }
 function getPackageInfo() {
-    return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
+    return JSON.parse(readFileSync(getFilePath('package.json', '.'), 'utf8'));
 }
 function getProject() {
     const workspace = getWorkspace();
@@ -164,18 +164,18 @@ function getProject() {
 }
 function getTargetPath(file, dir) {
     const project = getProject();
-    const path = dir ? `${project}/${dir}/` : '.';
-    if (dir && !existsSync(path)) {
-        mkdirSync(path, { recursive: true });
+    const targetDir = dir ? path.join(project, dir) : '.';
+    if (dir && !existsSync(targetDir)) {
+        mkdirSync(targetDir, { recursive: true });
     }
-    return `${path}/${file}`;
+    return path.join(targetDir, file);
 }
 function getVersion() {
     const info = getPackageInfo();
     return info.version;
 }
 function getWorkspace() {
-    return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
+    return JSON.parse(readFileSync('./system/sn-workspace.json', 'utf8'));
 }
 async function handleOptions(program, options, option) {
     if (!option || option === 'help') {
@@ -224,9 +224,6 @@ async function initGitRepo() {
     const msg = `Initialize a new git repository?`;
     return (await confirmFile(msg)) && (await $ `git init`);
 }
-function introPrompt(msg) {
-    return intro(msg);
-}
 function parseOptions(program) {
     return Object.keys(program.parse(process.argv).opts());
 }
@@ -255,9 +252,9 @@ async function runSyncScript() {
 function showHelp(program) {
     return program.help();
 }
-function startPrompts(start, intro) {
-    if (intro) {
-        introPrompt(intro);
+function startPrompts(start, introMsg) {
+    if (introMsg) {
+        intro(introMsg);
     }
     const s = spinner();
     s.start(start);
@@ -271,5 +268,5 @@ async function transpile() {
     return await $ `${tscPath}`;
 }
 function writeFile(file, data) {
-    return writeFileSync(file, data, { encoding: 'utf-8' });
+    writeFileSync(file, data, { encoding: 'utf8' });
 }
