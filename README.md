@@ -30,8 +30,7 @@ npm install -g sn-typescript-util
 Or with Homebrew:
 
 ```bash
-brew tap stevengregory/sn-typescript-util https://github.com/stevengregory/sn-typescript-util
-brew install snts
+brew install stevengregory/snts/snts
 ```
 
 Build the TypeScript and configuration files. This only needs to be done once per application.
@@ -131,13 +130,9 @@ An interrupted publish is resumable by running the same command again. Use `bun 
 bun run release --type patch --yes --dry-run
 ```
 
-After the npm package is published, refresh the Homebrew formula checksums:
-
-```bash
-bun run formula:update
-```
-
-Commit the updated `Formula/snts.rb` so `brew upgrade snts` picks up the new release.
+The Homebrew formula is maintained in the dedicated
+[`stevengregory/homebrew-snts`](https://github.com/stevengregory/homebrew-snts)
+tap and should be updated after each npm release.
 
 ## License
 

@@ -3,5 +3,5 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": ["release.ts", "update-homebrew-formula.ts", "../src/types/*.ts"]
+  "include": ["release.ts", "../src/types/*.ts"]
 }
