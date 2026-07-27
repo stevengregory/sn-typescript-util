@@ -6,13 +6,10 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { rm } from 'node:fs/promises';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, green, magenta, red } from 'colorette';
-import { cancel, confirm, intro, outro, select, spinner } from '@clack/prompts';
+import { cancel, confirm, intro, isCancel, outro, select, spinner } from '@clack/prompts';
 function cancelOperation() {
     cancel('Operation cancelled.');
     process.exit(0);
-}
-function isSymbol(value) {
-    return typeof value === 'symbol';
 }
 async function addFile(sourcefile, sourceDir, targetFile, targetDir, message) {
     if (await confirmFile(message)) {
@@ -31,7 +28,7 @@ async function confirmFile(msg) {
     const result = await confirm({
         message: `${msg}`
     });
-    if (isSymbol(result)) {
+    if (isCancel(result)) {
         cancelOperation();
     }
     return result;
@@ -111,7 +108,7 @@ async function getConfigTypes() {
         message: 'Please pick a ECMAScript target.',
         options: getConfigTargets()
     });
-    if (isSymbol(result)) {
+    if (isCancel(result)) {
         cancelOperation();
     }
     return result;

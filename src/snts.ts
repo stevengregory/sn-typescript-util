@@ -7,18 +7,22 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { rm } from 'node:fs/promises';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, green, magenta, red } from 'colorette';
-import { cancel, confirm, intro, outro, select, spinner } from '@clack/prompts';
+import {
+  cancel,
+  confirm,
+  intro,
+  isCancel,
+  outro,
+  select,
+  spinner
+} from '@clack/prompts';
 import type { Options } from './types/options.js';
 import type { Workspace } from './types/workspace.js';
 import type { ConfigTarget } from './types/config.js';
 
-function cancelOperation() {
+function cancelOperation(): never {
   cancel('Operation cancelled.');
   process.exit(0);
-}
-
-function isSymbol(value: unknown): value is symbol {
-  return typeof value === 'symbol';
 }
 
 async function addFile(
@@ -59,7 +63,7 @@ async function confirmFile(msg: string) {
   const result = await confirm({
     message: `${msg}`
   });
-  if (isSymbol(result)) {
+  if (isCancel(result)) {
     cancelOperation();
   }
   return result;
@@ -87,7 +91,7 @@ async function doBuild() {
   const filePath = getFilePath('tsconfig.json', 'src/templates');
   await createTemplate('tsconfig.json', filePath);
   const template = readFileSync('tsconfig.json', 'utf8');
-  const data = template.replace(/@version/g, esVersion as string);
+  const data = template.replace(/@version/g, esVersion);
   await writeFile('tsconfig.json', data);
   stopPrompt(s, `The ${cyan('tsconfig.json')} file was bootstrapped.`);
   await runSync();
@@ -143,15 +147,15 @@ function getConfigTargets(): ConfigTarget[] {
   ];
 }
 
-async function getConfigTypes(): Promise<string> {
-  const result = await select({
+async function getConfigTypes(): Promise<ConfigTarget['value']> {
+  const result = await select<ConfigTarget['value']>({
     message: 'Please pick a ECMAScript target.',
     options: getConfigTargets()
   });
-  if (isSymbol(result)) {
+  if (isCancel(result)) {
     cancelOperation();
   }
-  return result as string;
+  return result;
 }
 
 function getConstants() {
