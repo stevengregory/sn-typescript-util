@@ -1,4 +1,4 @@
-# SN TypeScript Util—TypeScript workflow for ServiceNow
+# SN TypeScript Util
 
 [Introduction](#introduction) • [Benefits](#benefits) • [Getting Started](#getting-started) • [Workflow](#workflow) • [Commands](#commands) • [npm](https://www.npmjs.com/package/sn-typescript-util) • [Homebrew](https://github.com/stevengregory/homebrew-snts)
 
