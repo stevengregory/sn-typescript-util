@@ -1,61 +1,66 @@
-# SN TypeScript Util
+# SN TypeScript Util—TypeScript workflow for ServiceNow
+
+[Introduction](#introduction) • [Benefits](#benefits) • [Getting Started](#getting-started) • [Workflow](#workflow) • [Commands](#commands) • [npm](https://www.npmjs.com/package/sn-typescript-util) • [Homebrew](https://github.com/stevengregory/homebrew-snts)
 
 [![npm version](https://img.shields.io/npm/v/sn-typescript-util)](https://www.npmjs.com/package/sn-typescript-util)
 [![node](https://img.shields.io/node/v/sn-typescript-util)](https://nodejs.org/)
 [![license](https://img.shields.io/npm/l/sn-typescript-util)](LICENSE)
 
-A [TypeScript](https://www.typescriptlang.org/) CLI utility that works on top of the ServiceNow Extension for VS Code, activating a TypeScript-based workflow for ServiceNow developers.
+## Introduction
+
+SN TypeScript Util is a CLI that adds a TypeScript workflow on top of the [ServiceNow Extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ServiceNow.now-vscode).
 
 ## Benefits
 
-- Work in modern JavaScript ES2015 (ES6) and beyond
-- Extend JavaScript by using types
+- Write modern JavaScript with TypeScript types
 - Unlock code navigation and intelligent code completion
 - Catch bugs before syncing to the instance
 
-## Prerequisites
+## Getting Started
 
-- [Node.js](https://nodejs.org/) 22.12 or later
-- [ServiceNow Extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ServiceNow.now-vscode)
-- An [imported application](https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/vscode-import-application.html) in VS Code
+Before starting, import a ServiceNow application into VS Code with the [ServiceNow Extension for VS Code](https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/vscode-import-application.html).
 
-## Installation and Setup
+### Install
 
-Install with npm:
-
-```bash
-npm install -g sn-typescript-util
-```
-
-Or with Homebrew:
+With Homebrew on macOS:
 
 ```bash
 brew install stevengregory/snts/snts
 ```
 
-Build the TypeScript and configuration files. This only needs to be done once per application.
+Homebrew installs the required Node.js runtime automatically.
+
+Or install from npm with Node.js 22.12 or later:
 
 ```bash
-snts -b
+npm install -g sn-typescript-util
 ```
 
-The build prompts you to select an ECMAScript target (ES5, ES2015, ES2021) and to configure optional extras: a `BaseTable.ts` interface with global default fields, a `.prettierrc.json` config, and git repository initialization.
+### Set up an application
 
-In the application directory created by the ServiceNow Extension for VS Code, the build creates a `ts` directory from the JavaScript files in the `src` directory. This is where all the TypeScript code resides and where the workflow begins.
+From the root of the imported application, run:
 
-## Basic Workflow
+```bash
+snts --build
+```
 
-After setup, run the TypeScript compiler in watch mode to pick up changes in the `ts` directory.
+The build creates a `ts` working directory from the JavaScript files in `src`. It also prompts for an ECMAScript target and optional extras: a `BaseTable.ts` interface with common fields, a Prettier configuration, and Git repository initialization.
+
+## Workflow
+
+Start the TypeScript compiler in watch mode while working in `ts`:
 
 ```bash
 tsc --watch
 ```
 
-The TypeScript is transpiled and moved to the `src` directory — or use `snts -c` for a one-time compile. Changes are then ready to sync to the target instance with the ServiceNow Extension for VS Code.
+Compiled JavaScript is moved into `src`, where it is ready to sync to the target instance with the ServiceNow Extension for VS Code. Use `snts --compile` when you prefer a one-time compile.
+
+When new JavaScript files are pulled into `src` from the instance, run `snts --sync` to add their TypeScript counterparts without replacing existing work in `ts`.
 
 ## Commands
 
-Installing the CLI globally provides the `snts` command.
+Installing the CLI provides the `snts` command.
 
 | Command     | Alias | Description                                                        |
 | ----------- | ----- | ------------------------------------------------------------------ |
@@ -66,73 +71,22 @@ Installing the CLI globally provides the `snts` command.
 | `--sync`    | `-s`  | Sync new instance-based `src` files to the `ts` directory          |
 | `--version` | `-v`  | Output the version number                                          |
 
-## Project Structure
+## Project Layout
 
-After the build, the application directory will look something like this.
+After setup, the important parts of an application look like this:
 
 ```text
-/
-├── background scripts/
-├── scratch/
-├── src/
-│   ├── Server Development/
-│   │   └── Script Includes/
-│   │       └── DataService.script.js
-│   │       └── Utils.script.js
-│   └── Service Portal/
-│       └── Widgets/
-│           └── Dashboard/
-│               └── Dashboard.client_script.js
-│               └── Dashboard.css.scss
-│               └── Dashboard.demo_data.json
-│               └── Dashboard.link.js
-│               └── Dashboard.option_schema.json
-│               └── Dashboard.script.js
-│               └── Dashboard.template.html
+application/
+├── src/                 # JavaScript managed by the ServiceNow extension
+├── ts/                  # TypeScript working tree created by snts
+│   └── Types/           # Shared interfaces and types
 ├── system/
-├── ts/
-│   ├── Server Development/
-│   │   └── Script Includes/
-│   │       └── DataService.script.ts
-│   │       └── Utils.script.ts
-│   ├── Service Portal/
-│   │   └── Widgets/
-│   │       └── Dashboard/
-│   │           └── Dashboard.client_script.ts
-│   │           └── Dashboard.link.ts
-│   │           └── Dashboard.script.ts
-│   └── Types/
-│       └── BaseTable.ts
-│       └── User.ts
-├── .eslintrc
 └── app.config.json
 ```
 
-This example project has two script includes, a widget, and a `Types` directory for interfaces and types.
+The directory structure under `ts` mirrors supported JavaScript files under `src`, with `.js` files represented as `.ts` files.
 
-## Releasing
-
-Maintainers release from a clean `master` branch with authenticated GitHub and npm CLIs:
-
-```bash
-bun run release
-```
-
-The command follows the protected-branch workflow automatically:
-
-1. If the current package version is already tagged and published, select the next version. The command creates a `release/vX.Y.Z` branch and opens a version-bump pull request.
-2. Review and merge that pull request.
-3. Run `bun run release` again from `master`. The command pulls the merged version, validates the package, pushes its tag, and publishes it to npm.
-
-An interrupted publish is resumable by running the same command again. Use `bun run release:status` to inspect the current tag and registry state, or preview a release without changing anything:
-
-```bash
-bun run release --type patch --yes --dry-run
-```
-
-The Homebrew formula is maintained in the dedicated
-[`stevengregory/homebrew-snts`](https://github.com/stevengregory/homebrew-snts)
-tap and should be updated after each npm release.
+See the [full sample application layout](https://github.com/stevengregory/sn-typescript-util/blob/master/docs/PROJECT_LAYOUT.md) for Script Include and Service Portal widget examples.
 
 ## License
 
