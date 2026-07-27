@@ -20,22 +20,6 @@ import type { Options } from './types/options.js';
 import type { Workspace } from './types/workspace.js';
 import type { ConfigTarget } from './types/config.js';
 
-const CONSTANTS = {
-  projectName: 'SN TypeScript Util',
-  projectDescription:
-    'is a TS utility for ServiceNow developers using VS Code.',
-  errorMsg:
-    'No active application detected. Please create a project with the ServiceNow Extension for VS Code.',
-  docsUrl:
-    'https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/create-project.html',
-  buildOption: 'Build project utility files & package dependencies',
-  compileOption: 'Compile TypeScript files to JavaScript & move to src',
-  helpOption: 'Display help for command',
-  removeOption: 'Remove & clean the ts build directory',
-  syncOption: 'Sync new instance-based src files to the ts directory',
-  versionOption: 'Output the current version'
-} as const;
-
 function cancelOperation(): never {
   cancel('Operation cancelled.');
   process.exit(0);
@@ -98,7 +82,7 @@ function createTemplate(file: string, templatePath: string): void {
 }
 
 async function doBuild() {
-  intro(`${bold(magenta(CONSTANTS.projectName))}: Build`);
+  intro(`${bold(magenta(getConstants().projectName))}: Build`);
   const esVersion = await getConfigTypes();
   await addInterfaceFile();
   await addPrettierFile();
@@ -174,12 +158,32 @@ async function getConfigTypes(): Promise<ConfigTarget['value']> {
   return result;
 }
 
+function getConstants() {
+  enum Constants {
+    projectName = 'SN TypeScript Util',
+    projectDescription = 'is a TS utility for ServiceNow developers using VS Code.',
+    errorMsg = 'No active application detected. Please create a project with the ServiceNow Extension for VS Code.',
+    docsUrl = 'https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/create-project.html',
+    buildOption = 'Build project utility files & package dependencies',
+    compileOption = 'Compile TypeScript files to JavaScript & move to src',
+    helpOption = 'Display help for command',
+    removeOption = 'Remove & clean the ts build directory',
+    syncOption = 'Sync new instance-based src files to the ts directory',
+    versionOption = 'Output the current version'
+  }
+  return Constants;
+}
+
 function getDescription(version: string): string {
-  return `${bold(magenta(CONSTANTS.projectName))} ${CONSTANTS.projectDescription} ${gray(`(v${version})`)}\n`;
+  const constants = getConstants();
+  const title: string = constants.projectName;
+  const description: string = constants.projectDescription;
+  return `${bold(magenta(title))} ${description} ${gray(`(v${version})`)}\n`;
 }
 
 function getErrorMsg() {
-  const msg = `${CONSTANTS.errorMsg}\n\n${CONSTANTS.docsUrl}`;
+  const constants = getConstants();
+  const msg: string = `${constants.errorMsg}\n\n${constants.docsUrl}`;
   return console.error(bold(red(msg)));
 }
 
@@ -264,13 +268,14 @@ try {
 
 async function init() {
   const program = new Command();
+  const constants = getConstants();
   const version = getVersion();
-  program.option('-b, --build', CONSTANTS.buildOption);
-  program.option('-c, --compile', CONSTANTS.compileOption);
-  program.option('-h, --help', CONSTANTS.helpOption);
-  program.option('-r, --remove', CONSTANTS.removeOption);
-  program.option('-s, --sync', CONSTANTS.syncOption);
-  program.version(version, '-v, --version', CONSTANTS.versionOption);
+  program.option('-b, --build', constants.buildOption);
+  program.option('-c, --compile', constants.compileOption);
+  program.option('-h, --help', constants.helpOption);
+  program.option('-r, --remove', constants.removeOption);
+  program.option('-s, --sync', constants.syncOption);
+  program.version(version, '-v, --version', constants.versionOption);
   program.usage(cyan('[options]'));
   return doOptions(program);
 }
