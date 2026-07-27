@@ -20,6 +20,22 @@ import type { Options } from './types/options.js';
 import type { Workspace } from './types/workspace.js';
 import type { ConfigTarget } from './types/config.js';
 
+const CONSTANTS = {
+  projectName: 'SN TypeScript Util',
+  projectDescription:
+    'is a TS utility for ServiceNow developers using VS Code.',
+  errorMsg:
+    'No active application detected. Please create a project with the ServiceNow Extension for VS Code.',
+  docsUrl:
+    'https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/create-project.html',
+  buildOption: 'Build project utility files & package dependencies',
+  compileOption: 'Compile TypeScript files to JavaScript & move to src',
+  helpOption: 'Display help for command',
+  removeOption: 'Remove & clean the ts build directory',
+  syncOption: 'Sync new instance-based src files to the ts directory',
+  versionOption: 'Output the current version'
+} as const;
+
 function cancelOperation(): never {
   cancel('Operation cancelled.');
   process.exit(0);
@@ -35,7 +51,7 @@ async function addFile(
   if (await confirmFile(message)) {
     const file = getTargetPath(targetFile, targetDir);
     const filePath = getFilePath(sourcefile, sourceDir);
-    await createFile(file, filePath);
+    createFile(file, filePath);
   }
 }
 
@@ -61,7 +77,7 @@ async function addPrettierFile() {
 
 async function confirmFile(msg: string) {
   const result = await confirm({
-    message: `${msg}`
+    message: msg
   });
   if (isCancel(result)) {
     cancelOperation();
@@ -69,30 +85,30 @@ async function confirmFile(msg: string) {
   return result;
 }
 
-async function createFile(file: string, path: string): Promise<void> {
-  const template = readFileSync(path, 'utf8');
-  return await writeFile(file, template);
+function createFile(file: string, templatePath: string): void {
+  const template = readFileSync(templatePath, 'utf8');
+  writeFile(file, template);
 }
 
-async function createTemplate(file: string, path: string): Promise<void> {
+function createTemplate(file: string, templatePath: string): void {
   const project = getProject();
-  const template = readFileSync(path, 'utf8');
+  const template = readFileSync(templatePath, 'utf8');
   const data = template.replace(/@project/g, project);
-  return await writeFile(file, data);
+  writeFile(file, data);
 }
 
 async function doBuild() {
-  introPrompt(`${bold(magenta(getConstants().projectName))}: Build`);
+  intro(`${bold(magenta(CONSTANTS.projectName))}: Build`);
   const esVersion = await getConfigTypes();
   await addInterfaceFile();
   await addPrettierFile();
   await initGitRepo();
   const s = startPrompts('Installing config(s)', null);
   const filePath = getFilePath('tsconfig.json', 'src/templates');
-  await createTemplate('tsconfig.json', filePath);
+  createTemplate('tsconfig.json', filePath);
   const template = readFileSync('tsconfig.json', 'utf8');
   const data = template.replace(/@version/g, esVersion);
-  await writeFile('tsconfig.json', data);
+  writeFile('tsconfig.json', data);
   stopPrompt(s, `The ${cyan('tsconfig.json')} file was bootstrapped.`);
   await runSync();
 }
@@ -158,39 +174,19 @@ async function getConfigTypes(): Promise<ConfigTarget['value']> {
   return result;
 }
 
-function getConstants() {
-  enum Constants {
-    projectName = 'SN TypeScript Util',
-    projectDescription = 'is a TS utility for ServiceNow developers using VS Code.',
-    errorMsg = 'No active application detected. Please create a project with the ServiceNow Extension for VS Code.',
-    docsUrl = 'https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/create-project.html',
-    buildOption = 'Build project utility files & package dependencies',
-    compileOption = 'Compile TypeScript files to JavaScript & move to src',
-    helpOption = 'Display help for command',
-    removeOption = 'Remove & clean the ts build directory',
-    syncOption = 'Sync new instance-based src files to the ts directory',
-    versionOption = 'Output the current version'
-  }
-  return Constants;
-}
-
 function getDescription(version: string): string {
-  const constants = getConstants();
-  const title: string = constants.projectName;
-  const description: string = constants.projectDescription;
-  return `${bold(magenta(title))} ${description} ${gray(`(v${version})`)}\n`;
+  return `${bold(magenta(CONSTANTS.projectName))} ${CONSTANTS.projectDescription} ${gray(`(v${version})`)}\n`;
 }
 
 function getErrorMsg() {
-  const constants = getConstants();
-  const msg: string = `${constants.errorMsg}\n\n${constants.docsUrl}`;
+  const msg = `${CONSTANTS.errorMsg}\n\n${CONSTANTS.docsUrl}`;
   return console.error(bold(red(msg)));
 }
 
 function getFilePath(file: string, dir: string): string {
   const fileName = fileURLToPath(import.meta.url);
   const dirName = path.dirname(fileName);
-  return `${path.join(dirName, `../${dir}`)}/${file}`;
+  return path.join(dirName, '..', dir, file);
 }
 
 function getOptions(program: Command): Options {
@@ -205,7 +201,7 @@ function getOptions(program: Command): Options {
 }
 
 function getPackageInfo() {
-  return JSON.parse(readFileSync(getFilePath('package.json', '.')).toString());
+  return JSON.parse(readFileSync(getFilePath('package.json', '.'), 'utf8'));
 }
 
 function getProject(): string {
@@ -215,11 +211,11 @@ function getProject(): string {
 
 function getTargetPath(file: string, dir: string | null) {
   const project = getProject();
-  const path = dir ? `${project}/${dir}/` : '.';
-  if (dir && !existsSync(path)) {
-    mkdirSync(path, { recursive: true });
+  const targetDir = dir ? path.join(project, dir) : '.';
+  if (dir && !existsSync(targetDir)) {
+    mkdirSync(targetDir, { recursive: true });
   }
-  return `${path}/${file}`;
+  return path.join(targetDir, file);
 }
 
 function getVersion() {
@@ -228,7 +224,7 @@ function getVersion() {
 }
 
 function getWorkspace(): Workspace {
-  return JSON.parse(readFileSync('./system/sn-workspace.json').toString());
+  return JSON.parse(readFileSync('./system/sn-workspace.json', 'utf8'));
 }
 
 async function handleOptions(
@@ -268,14 +264,13 @@ try {
 
 async function init() {
   const program = new Command();
-  const constants = getConstants();
   const version = getVersion();
-  program.option('-b, --build', constants.buildOption);
-  program.option('-c, --compile', constants.compileOption);
-  program.option('-h, --help', constants.helpOption);
-  program.option('-r, --remove', constants.removeOption);
-  program.option('-s, --sync', constants.syncOption);
-  program.version(version, '-v, --version', constants.versionOption);
+  program.option('-b, --build', CONSTANTS.buildOption);
+  program.option('-c, --compile', CONSTANTS.compileOption);
+  program.option('-h, --help', CONSTANTS.helpOption);
+  program.option('-r, --remove', CONSTANTS.removeOption);
+  program.option('-s, --sync', CONSTANTS.syncOption);
+  program.version(version, '-v, --version', CONSTANTS.versionOption);
   program.usage(cyan('[options]'));
   return doOptions(program);
 }
@@ -283,10 +278,6 @@ async function init() {
 async function initGitRepo() {
   const msg = `Initialize a new git repository?`;
   return (await confirmFile(msg)) && (await $`git init`);
-}
-
-function introPrompt(msg: string) {
-  return intro(msg);
 }
 
 function parseOptions(program: Command): string[] {
@@ -328,9 +319,9 @@ function showHelp(program: Command) {
   return program.help();
 }
 
-function startPrompts(start: string, intro: string | null) {
-  if (intro) {
-    introPrompt(intro);
+function startPrompts(start: string, introMsg: string | null) {
+  if (introMsg) {
+    intro(introMsg);
   }
   const s = spinner();
   s.start(start);
@@ -347,5 +338,5 @@ async function transpile() {
 }
 
 function writeFile(file: string, data: string) {
-  return writeFileSync(file, data, { encoding: 'utf-8' });
+  writeFileSync(file, data, { encoding: 'utf8' });
 }

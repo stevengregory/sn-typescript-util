@@ -2,7 +2,14 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cancel, confirm, intro, outro, select } from '@clack/prompts';
+import {
+  cancel,
+  confirm,
+  intro,
+  isCancel,
+  outro,
+  select
+} from '@clack/prompts';
 import type { Version, VersionType } from '../src/types/version.js';
 
 interface CliOptions {
@@ -79,7 +86,7 @@ async function confirmAction(message: string, assumeYes: boolean) {
   }
 
   const answer = await confirm({ message });
-  if (typeof answer === 'symbol') {
+  if (isCancel(answer)) {
     cancelOperation();
   }
   return answer;
