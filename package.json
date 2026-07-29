@@ -22,11 +22,12 @@
     "src"
   ],
   "scripts": {
-    "format": "prettier --write ./bin/*.js ./src/*.ts ./scripts/*.ts",
+    "format": "prettier --write ./bin/*.js ./src/*.ts ./scripts/*.ts ./tests/*.ts",
     "lint": "bun eslint .",
     "prepublishOnly": "bun run typecheck",
     "release": "bun ./scripts/release.ts",
     "release:status": "bun ./scripts/release.ts --status",
+    "test": "bun test",
     "typecheck": "tsc --noEmit && tsc -p scripts",
     "watch": "tsc --watch"
   },

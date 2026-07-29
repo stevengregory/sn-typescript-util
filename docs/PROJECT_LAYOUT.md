@@ -46,7 +46,7 @@ In this example:
 
 - Script Includes and executable widget JavaScript have matching TypeScript files under `ts`.
 - Stylesheets, templates, and JSON assets remain only under `src` because they are not TypeScript sources.
-- `ts/Types` contains shared interfaces and types. `BaseTable.ts` is optional and can be created during `snts --build`.
+- `ts/Types` contains shared interfaces and types. A legacy `BaseTable.ts` interface for common runtime record fields is optional and can be created during `snts --build`.
 - The root `tsconfig.json` records the ECMAScript target selected during `snts --build`; `.prettierrc.json` is optional.
 - `snts --compile` writes compiled JavaScript to the corresponding paths under `src`.
 - `snts --sync` adds TypeScript counterparts for new supported JavaScript files without replacing existing files under `ts`.
