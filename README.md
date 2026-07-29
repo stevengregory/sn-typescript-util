@@ -44,7 +44,7 @@ From the root of the imported application, run:
 snts --build
 ```
 
-The build creates a `ts` working directory from the JavaScript files in `src`. It also prompts for an ECMAScript target and optional extras: a `BaseTable.ts` interface with common fields, a Prettier configuration, and Git repository initialization.
+The build creates a `ts` working directory from the JavaScript files in `src`. It also prompts for an ECMAScript target and optional extras: a legacy `BaseTable.ts` interface for common runtime record fields, a Prettier configuration, and Git repository initialization.
 
 ## Workflow
 

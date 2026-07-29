@@ -45,7 +45,7 @@ async function addInterfaceFile() {
     'src/templates',
     'BaseTable.ts',
     'ts/Types',
-    `Add a ${cyan('BaseTable.ts')} interface with global default fields?`
+    `Add a legacy ${cyan('BaseTable.ts')} interface for common runtime record fields?`
   );
 }
 
