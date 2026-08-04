@@ -7,6 +7,7 @@ import { rm } from 'node:fs/promises';
 import { fileURLToPath } from 'url';
 import { bold, cyan, gray, green, magenta, red } from 'colorette';
 import { cancel, confirm, intro, isCancel, outro, select, spinner } from '@clack/prompts';
+import { detectProject } from './project.js';
 function cancelOperation() {
     cancel('Operation cancelled.');
     process.exit(0);
@@ -19,7 +20,7 @@ async function addFile(sourcefile, sourceDir, targetFile, targetDir, message) {
     }
 }
 async function addInterfaceFile() {
-    return await addFile('base-table.ts', 'src/templates', 'BaseTable.ts', 'ts/Types', `Add a ${cyan('BaseTable.ts')} interface with global default fields?`);
+    return await addFile('base-table.ts', 'src/templates', 'BaseTable.ts', 'ts/Types', `Add a legacy ${cyan('BaseTable.ts')} interface for common runtime record fields?`);
 }
 async function addPrettierFile() {
     return await addFile('.prettierrc.json', 'src/templates', '.prettierrc.json', null, `Add a ${cyan('.prettierrc.json')} default config?`);
@@ -118,8 +119,8 @@ function getConstants() {
     (function (Constants) {
         Constants["projectName"] = "SN TypeScript Util";
         Constants["projectDescription"] = "is a TS utility for ServiceNow developers using VS Code.";
-        Constants["errorMsg"] = "No active application detected. Please create a project with the ServiceNow Extension for VS Code.";
-        Constants["docsUrl"] = "https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/create-project.html";
+        Constants["extensionDocsUrl"] = "https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/create-project.html";
+        Constants["sdkDocsUrl"] = "https://www.servicenow.com/docs/r/application-development/servicenow-sdk/developing-applications-sdk.html";
         Constants["buildOption"] = "Build project utility files & package dependencies";
         Constants["compileOption"] = "Compile TypeScript files to JavaScript & move to src";
         Constants["helpOption"] = "Display help for command";
@@ -135,10 +136,45 @@ function getDescription(version) {
     const description = constants.projectDescription;
     return `${bold(magenta(title))} ${description} ${gray(`(v${version})`)}\n`;
 }
-function getErrorMsg() {
+function getProjectError(state) {
     const constants = getConstants();
-    const msg = `${constants.errorMsg}\n\n${constants.docsUrl}`;
-    return console.error(bold(red(msg)));
+    switch (state.kind) {
+        case 'sdk':
+            return `Detected a ServiceNow SDK / Fluent project.
+
+SN TypeScript Util currently supports projects imported with the ServiceNow Extension for VS Code. SDK support is being explored.
+
+No files were changed.
+
+${constants.sdkDocsUrl}`;
+        case 'conflicting':
+            return `Detected both ServiceNow Extension and ServiceNow SDK project files (${state.markers.join(', ')}).
+
+SN TypeScript Util will not modify this project until its workflow is unambiguous.
+
+No files were changed.`;
+        case 'invalid':
+            return `The system/sn-workspace.json file could not be read as a valid ServiceNow Extension workspace.
+
+No files were changed.`;
+        case 'no-active-application':
+            return `No active application detected. Select an application in the ServiceNow Extension for VS Code.
+
+No files were changed.
+
+${constants.extensionDocsUrl}`;
+        case 'missing':
+            return `No supported ServiceNow project was detected.
+
+Run SN TypeScript Util from a project imported with the ServiceNow Extension for VS Code. ServiceNow SDK support is not available yet.
+
+No files were changed.
+
+${constants.extensionDocsUrl}`;
+    }
+}
+function printProjectError(state) {
+    console.error(bold(red(getProjectError(state))));
 }
 function getFilePath(file, dir) {
     const fileName = fileURLToPath(import.meta.url);
@@ -159,8 +195,11 @@ function getPackageInfo() {
     return JSON.parse(readFileSync(getFilePath('package.json', '.'), 'utf8'));
 }
 function getProject() {
-    const workspace = getWorkspace();
-    return workspace.ACTIVE_APPLICATION;
+    const state = detectProject();
+    if (state.kind !== 'extension') {
+        throw new Error(getProjectError(state));
+    }
+    return state.project;
 }
 function getTargetPath(file, dir) {
     const project = getProject();
@@ -174,30 +213,23 @@ function getVersion() {
     const info = getPackageInfo();
     return info.version;
 }
-function getWorkspace() {
-    return JSON.parse(readFileSync('./system/sn-workspace.json', 'utf8'));
-}
 async function handleOptions(program, options, option) {
     if (!option || option === 'help') {
         const version = getVersion();
         console.log(getDescription(version));
         return showHelp(program);
     }
-    if (!hasApplication()) {
+    if (!hasExtensionProject()) {
         return process.exit(1);
     }
     return await options[option]();
 }
-function hasApplication() {
-    try {
-        if (getWorkspace().ACTIVE_APPLICATION.length > 0) {
-            return true;
-        }
-        getErrorMsg();
+function hasExtensionProject() {
+    const state = detectProject();
+    if (state.kind === 'extension') {
+        return true;
     }
-    catch {
-        getErrorMsg();
-    }
+    printProjectError(state);
     return false;
 }
 try {
