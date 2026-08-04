@@ -7,6 +7,6 @@ export default [
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: ['node_modules', 'tmp']
+    ignores: ['bin', 'node_modules', 'src/templates', 'tmp']
   }
 ];

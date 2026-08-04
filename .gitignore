@@ -1,4 +1,5 @@
 .DS_Store
+bin/types/
 dist
 node_modules
 tmp

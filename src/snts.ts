@@ -17,8 +17,8 @@ import {
   spinner
 } from '@clack/prompts';
 import type { Options } from './types/options.js';
-import type { Workspace } from './types/workspace.js';
 import type { ConfigTarget } from './types/config.js';
+import { detectProject, type ProjectState } from './project.js';
 
 function cancelOperation(): never {
   cancel('Operation cancelled.');
@@ -162,8 +162,8 @@ function getConstants() {
   enum Constants {
     projectName = 'SN TypeScript Util',
     projectDescription = 'is a TS utility for ServiceNow developers using VS Code.',
-    errorMsg = 'No active application detected. Please create a project with the ServiceNow Extension for VS Code.',
-    docsUrl = 'https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/create-project.html',
+    extensionDocsUrl = 'https://www.servicenow.com/docs/bundle/yokohama-application-development/page/build/applications/task/create-project.html',
+    sdkDocsUrl = 'https://www.servicenow.com/docs/r/application-development/servicenow-sdk/developing-applications-sdk.html',
     buildOption = 'Build project utility files & package dependencies',
     compileOption = 'Compile TypeScript files to JavaScript & move to src',
     helpOption = 'Display help for command',
@@ -181,10 +181,50 @@ function getDescription(version: string): string {
   return `${bold(magenta(title))} ${description} ${gray(`(v${version})`)}\n`;
 }
 
-function getErrorMsg() {
+function getProjectError(
+  state: Exclude<ProjectState, { kind: 'extension' }>
+): string {
   const constants = getConstants();
-  const msg: string = `${constants.errorMsg}\n\n${constants.docsUrl}`;
-  return console.error(bold(red(msg)));
+  switch (state.kind) {
+    case 'sdk':
+      return `Detected a ServiceNow SDK / Fluent project.
+
+SN TypeScript Util currently supports projects imported with the ServiceNow Extension for VS Code. SDK support is being explored.
+
+No files were changed.
+
+${constants.sdkDocsUrl}`;
+    case 'conflicting':
+      return `Detected both ServiceNow Extension and ServiceNow SDK project files (${state.markers.join(', ')}).
+
+SN TypeScript Util will not modify this project until its workflow is unambiguous.
+
+No files were changed.`;
+    case 'invalid':
+      return `The system/sn-workspace.json file could not be read as a valid ServiceNow Extension workspace.
+
+No files were changed.`;
+    case 'no-active-application':
+      return `No active application detected. Select an application in the ServiceNow Extension for VS Code.
+
+No files were changed.
+
+${constants.extensionDocsUrl}`;
+    case 'missing':
+      return `No supported ServiceNow project was detected.
+
+Run SN TypeScript Util from a project imported with the ServiceNow Extension for VS Code. ServiceNow SDK support is not available yet.
+
+No files were changed.
+
+${constants.extensionDocsUrl}`;
+  }
+}
+
+function printProjectError(
+  state: Exclude<ProjectState, { kind: 'extension' }>
+) {
+  console.error(bold(red(getProjectError(state))));
 }
 
 function getFilePath(file: string, dir: string): string {
@@ -209,8 +249,11 @@ function getPackageInfo() {
 }
 
 function getProject(): string {
-  const workspace = getWorkspace();
-  return workspace.ACTIVE_APPLICATION;
+  const state = detectProject();
+  if (state.kind !== 'extension') {
+    throw new Error(getProjectError(state));
+  }
+  return state.project;
 }
 
 function getTargetPath(file: string, dir: string | null) {
@@ -227,10 +270,6 @@ function getVersion() {
   return info.version;
 }
 
-function getWorkspace(): Workspace {
-  return JSON.parse(readFileSync('./system/sn-workspace.json', 'utf8'));
-}
-
 async function handleOptions(
   program: Command,
   options: Options,
@@ -241,21 +280,18 @@ async function handleOptions(
     console.log(getDescription(version));
     return showHelp(program);
   }
-  if (!hasApplication()) {
+  if (!hasExtensionProject()) {
     return process.exit(1);
   }
   return await options[option]();
 }
 
-function hasApplication(): boolean {
-  try {
-    if (getWorkspace().ACTIVE_APPLICATION.length > 0) {
-      return true;
-    }
-    getErrorMsg();
-  } catch {
-    getErrorMsg();
+function hasExtensionProject(): boolean {
+  const state = detectProject();
+  if (state.kind === 'extension') {
+    return true;
   }
+  printProjectError(state);
   return false;
 }
 

@@ -17,14 +17,17 @@
     "url": "git+https://github.com/stevengregory/sn-typescript-util.git"
   },
   "files": [
-    "bin",
+    "bin/project.js",
+    "bin/snts.js",
     "scripts",
     "src"
   ],
   "scripts": {
+    "build": "tsc",
     "format": "prettier --write ./bin/*.js ./src/*.ts ./scripts/*.ts ./tests/*.ts",
     "lint": "bun eslint .",
     "prepublishOnly": "bun run typecheck",
+    "pretest": "bun run build",
     "release": "bun ./scripts/release.ts",
     "release:status": "bun ./scripts/release.ts --status",
     "test": "bun test",
